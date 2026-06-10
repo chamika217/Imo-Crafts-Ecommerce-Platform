@@ -101,3 +101,4 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// chore: update 108 - 2026-06-10T22:55:06
