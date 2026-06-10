@@ -30,3 +30,4 @@ const CategoryCard = ({ category }) => {
 };
 
 export default CategoryCard;
+// chore: update 24 - 2026-06-10T14:20:49
