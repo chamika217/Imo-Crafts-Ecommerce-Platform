@@ -11,3 +11,4 @@ router.post('/', verifyAdmin, upload.single('image'), uploadImage);
 router.delete('/:publicId', verifyAdmin, deleteImage);
 
 export default router;
+// chore: update 7 - 2026-06-11T12:02:02
