@@ -20,3 +20,4 @@ router.put('/:id', verifyAdmin, updateInquiryStatus);
 router.delete('/:id', verifyAdmin, deleteInquiry);
 
 export default router;
+// chore: update 2 - 2026-06-12T03:02:22
