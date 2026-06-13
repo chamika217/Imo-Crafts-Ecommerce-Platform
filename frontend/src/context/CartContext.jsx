@@ -70,3 +70,4 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+// chore: update 59 - 2026-06-14T00:18:31
