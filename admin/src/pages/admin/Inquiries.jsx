@@ -217,3 +217,5 @@ const InquiryModal = ({ inquiry, onClose, onUpdate, statusColors }) => {
 
 export default Inquiries;
 // chore: update 12 - 2026-06-11T17:24:12
+
+// chore: update 77 - 2026-06-14T11:08:19
