@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #F7F2EC;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+}
+
+.login-input:-webkit-autofill,
+.login-input:-webkit-autofill:hover,
+.login-input:-webkit-autofill:focus,
+.login-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #FAF6F1 inset !important;
+  box-shadow: 0 0 0 1000px #FAF6F1 inset !important;
+  -webkit-text-fill-color: #2D2018 !important;
+  caret-color: #2D2018;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.login-field:focus-within .login-input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+}

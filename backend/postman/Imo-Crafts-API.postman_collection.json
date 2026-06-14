@@ -1,0 +1,618 @@
+{
+  "info": {
+    "name": "Imo Crafts API",
+    "description": "API collection for Imo Crafts e-commerce backend - Products, Orders, Customers, Inquiries, and Image Upload endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "firebaseToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "customerId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "inquiryId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "API Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": [""]
+            },
+            "description": "Check if the Imo Crafts API server is running."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Get all products. Optional query params: category, status, featured."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Products by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category=handmade-gifts",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "handmade-gifts"
+                }
+              ]
+            },
+            "description": "Get products filtered by category ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Featured Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "featured"]
+            },
+            "description": "Get all featured, active products (used on the Home page)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Get a single product by its Firestore document ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Handmade Photo Frame\",\n  \"price\": 1500,\n  \"description\": \"Beautiful handmade wooden photo frame, customizable.\",\n  \"categoryId\": \"handmade-gifts\",\n  \"stockQty\": 10,\n  \"status\": \"active\",\n  \"featured\": true,\n  \"images\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Create a new product. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Handmade Photo Frame - Updated\",\n  \"price\": 1750,\n  \"stockQty\": 8,\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Update an existing product by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Delete a product by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order (Public - Checkout)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerInfo\": {\n    \"name\": \"Kasun Perera\",\n    \"phone\": \"0771234567\",\n    \"email\": \"kasun@example.com\",\n    \"address\": \"123 Galle Road, Colombo 03\",\n    \"district\": \"Colombo\",\n    \"notes\": \"Please call before delivery\"\n  },\n  \"items\": [\n    {\n      \"productId\": \"sample-product-id\",\n      \"name\": \"Handmade Photo Frame\",\n      \"price\": 1500,\n      \"quantity\": 2,\n      \"notes\": \"\",\n      \"image\": \"\"\n    }\n  ],\n  \"subtotal\": 3000,\n  \"deliveryFee\": 0,\n  \"total\": 3000,\n  \"paymentMethod\": \"COD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Place a new Cash on Delivery order. Public endpoint used by the customer checkout page."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Orders (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Get all orders. Optional query param: status. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders by Status (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders?status=Pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "Pending"
+                }
+              ]
+            },
+            "description": "Get orders filtered by order status (Pending, Confirmed, Processing, etc.)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Order (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Get a single order by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderStatus\": \"Confirmed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Update order status (Pending, Confirmed, Processing, Ready for Delivery, Dispatched, Delivered, Cancelled). Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Order (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Delete an order by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Get All Customers (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            },
+            "description": "Get all customer records. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Customer (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "{{customerId}}"]
+            },
+            "description": "Get a single customer by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Customer (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kasun Perera\",\n  \"phone\": \"0771234567\",\n  \"email\": \"kasun@example.com\",\n  \"address\": \"123 Galle Road, Colombo 03\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "{{customerId}}"]
+            },
+            "description": "Update customer details by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Customer (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "{{customerId}}"]
+            },
+            "description": "Delete a customer record by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Custom Inquiries",
+      "item": [
+        {
+          "name": "Create Inquiry (Public - Custom Order)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerInfo\": {\n    \"name\": \"Nimasha Silva\",\n    \"phone\": \"0719876543\",\n    \"email\": \"nimasha@example.com\"\n  },\n  \"eventDate\": \"2026-07-15\",\n  \"description\": \"Need a custom birthday decoration set with pink and gold theme for a 25th birthday party.\",\n  \"budget\": \"5000-8000\",\n  \"quantity\": \"1 set\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inquiries",
+              "host": ["{{baseUrl}}"],
+              "path": ["inquiries"]
+            },
+            "description": "Submit a custom order inquiry. Public endpoint used by the Custom Order page."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Inquiries (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inquiries",
+              "host": ["{{baseUrl}}"],
+              "path": ["inquiries"]
+            },
+            "description": "Get all custom order inquiries. Optional query param: status. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Inquiry (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/{{inquiryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["inquiries", "{{inquiryId}}"]
+            },
+            "description": "Get a single inquiry by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Inquiry Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Quoted\",\n  \"adminNotes\": \"Quoted Rs. 6500 for the full set, awaiting customer confirmation.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/{{inquiryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["inquiries", "{{inquiryId}}"]
+            },
+            "description": "Update inquiry status (Pending, Reviewing, Quoted, Confirmed, Cancelled) and admin notes. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Inquiry (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/{{inquiryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["inquiries", "{{inquiryId}}"]
+            },
+            "description": "Delete an inquiry by ID. Requires Firebase admin Bearer token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Upload (Cloudinary)",
+      "item": [
+        {
+          "name": "Upload Image (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["upload"]
+            },
+            "description": "Upload an image to Cloudinary. Select a file under form-data 'image' key. Requires Firebase admin Bearer token. Returns { url, publicId }."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Image (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/upload/imo-crafts%2Fsample-public-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["upload", "imo-crafts%2Fsample-public-id"]
+            },
+            "description": "Delete an image from Cloudinary by its URL-encoded publicId (e.g. imo-crafts/abc123). Requires Firebase admin Bearer token."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
