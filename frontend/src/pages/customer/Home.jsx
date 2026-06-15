@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Truck, Shield, Phone, ChevronRight } from 'lucide-react';
+import { ArrowRight, Truck, Shield, Phone } from 'lucide-react';
 import axios from 'axios';
 import ProductCard from '../../components/ui/ProductCard';
+import resin1 from '../../assets/resin1.jpg';
+import resin2 from '../../assets/resin2.jpg';
+import resin3 from '../../assets/resin3.jpg';
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+const heroImages = [resin1, resin2, resin3];
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -24,6 +30,13 @@ const Home = () => {
     fetchFeatured();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   const categories = [
     { name: 'Handmade Gifts', emoji: '🎁', id: 'handmade-gifts' },
     { name: 'Event & Party', emoji: '🎉', id: 'event-crafts' },
@@ -36,45 +49,92 @@ const Home = () => {
 
       {/* Hero Section */}
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 50%, #FFE0B2 100%)', width: '100%', padding: '80px 0' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '8px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: '500', marginBottom: '24px' }}>
-            <span>🎨</span> Handcrafted with Love in Sri Lanka
-          </div>
-          <h1 style={{ fontSize: '56px', fontWeight: '800', color: '#111827', lineHeight: '1.2', marginBottom: '24px' }}>
-            Unique Handmade<br />
-            <span style={{ color: '#8B4513' }}>Crafts & Gifts</span>
-          </h1>
-          <p style={{ fontSize: '18px', color: '#6B7280', maxWidth: '600px', margin: '0 auto 40px', lineHeight: '1.7' }}>
-            Discover beautifully crafted handmade items, personalized gifts, and custom
-            decorations for every special occasion. Made with love, delivered island-wide.
-          </p>
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '48px' }}>
-            <Link
-              to="/shop"
-              style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)', color: 'white', padding: '14px 36px', borderRadius: '999px', fontWeight: '600', fontSize: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', boxShadow: '0 4px 15px rgba(139,69,19,0.3)' }}
-            >
-              Shop Now <ArrowRight size={18} />
-            </Link>
-            <Link
-              to="/custom-order"
-              style={{ border: '2px solid #8B4513', color: '#8B4513', padding: '14px 36px', borderRadius: '999px', fontWeight: '600', fontSize: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', backgroundColor: 'transparent' }}
-            >
-              Custom Order
-            </Link>
-          </div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '48px', alignItems: 'center' }}>
 
-          {/* Stats */}
-          <div style={{ display: 'flex', gap: '48px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[
-              { value: '500+', label: 'Happy Customers' },
-              { value: '1000+', label: 'Orders Delivered' },
-              { value: '50+', label: 'Craft Designs' },
-            ].map((stat, i) => (
-              <div key={i} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '32px', fontWeight: '800', color: '#8B4513' }}>{stat.value}</div>
-                <div style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '4px' }}>{stat.label}</div>
+            {/* Left - Text */}
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '8px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: '500', marginBottom: '24px' }}>
+                <span>🎨</span> Handcrafted with Love in Sri Lanka
               </div>
-            ))}
+              <h1 style={{ fontSize: '56px', fontWeight: '800', color: '#111827', lineHeight: '1.2', marginBottom: '24px' }}>
+                Unique Handmade<br />
+                <span style={{ color: '#8B4513' }}>Crafts & Gifts</span>
+              </h1>
+              <p style={{ fontSize: '18px', color: '#6B7280', maxWidth: '520px', marginBottom: '40px', lineHeight: '1.7' }}>
+                Discover beautifully crafted handmade items, personalized gifts, and custom
+                decorations for every special occasion. Made with love, delivered island-wide.
+              </p>
+              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '48px' }}>
+                <Link
+                  to="/shop"
+                  style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)', color: 'white', padding: '14px 36px', borderRadius: '999px', fontWeight: '600', fontSize: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', boxShadow: '0 4px 15px rgba(139,69,19,0.3)' }}
+                >
+                  Shop Now <ArrowRight size={18} />
+                </Link>
+                <Link
+                  to="/custom-order"
+                  style={{ border: '2px solid #8B4513', color: '#8B4513', padding: '14px 36px', borderRadius: '999px', fontWeight: '600', fontSize: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', backgroundColor: 'transparent' }}
+                >
+                  Custom Order
+                </Link>
+              </div>
+
+              {/* Stats */}
+              <div style={{ display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
+                {[
+                  { value: '500+', label: 'Happy Customers' },
+                  { value: '1000+', label: 'Orders Delivered' },
+                  { value: '50+', label: 'Craft Designs' },
+                ].map((stat, i) => (
+                  <div key={i}>
+                    <div style={{ fontSize: '32px', fontWeight: '800', color: '#8B4513' }}>{stat.value}</div>
+                    <div style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '4px' }}>{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right - Image Carousel */}
+            <div style={{ position: 'relative' }}>
+              <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '100%', height: '100%', background: 'linear-gradient(135deg, #D4A574, #8B4513)', borderRadius: '32px', opacity: 0.15, zIndex: 0 }} />
+              <div style={{ position: 'relative', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(139,69,19,0.2)', aspectRatio: '4/5', backgroundColor: 'white' }}>
+                {heroImages.map((img, i) => (
+                  <img
+                    key={i}
+                    src={img}
+                    alt={`Resin art ${i + 1}`}
+                    style={{
+                      position: 'absolute',
+                      top: 0, left: 0,
+                      width: '100%', height: '100%',
+                      objectFit: 'cover',
+                      opacity: currentImage === i ? 1 : 0,
+                      transition: 'opacity 1s ease-in-out',
+                    }}
+                  />
+                ))}
+              </div>
+              {/* Dots */}
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '20px' }}>
+                {heroImages.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentImage(i)}
+                    style={{
+                      width: currentImage === i ? '24px' : '8px',
+                      height: '8px',
+                      borderRadius: '999px',
+                      border: 'none',
+                      backgroundColor: currentImage === i ? '#8B4513' : '#E5D5C5',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -212,11 +272,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// chore: update 32 - 2026-06-12T18:42:46
-
-// chore: update 47 - 2026-06-10T18:19:01
-
-// chore: update 130 - 2026-06-14T09:51:15
-
-// chore: update 134 - 2026-06-12T10:29:35
