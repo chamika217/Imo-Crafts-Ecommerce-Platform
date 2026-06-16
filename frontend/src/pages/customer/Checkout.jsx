@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import axios from 'axios';
+import emailjs from '@emailjs/browser';
 import toast from 'react-hot-toast';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -31,6 +32,27 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const sendConfirmationEmail = async (orderId) => {
+    try {
+      if (!formData.email) return;
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          customer_name: formData.name,
+          customer_email: formData.email,
+          order_id: orderId.slice(-8).toUpperCase(),
+          order_total: cartTotal.toLocaleString(),
+          delivery_address: formData.address,
+          district: formData.district,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+    } catch (error) {
+      console.error('Email send failed:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (cartItems.length === 0) {
@@ -57,8 +79,10 @@ const Checkout = () => {
       };
 
       const res = await axios.post(`${API_URL}/orders`, orderData);
+      await sendConfirmationEmail(res.data.id);
       clearCart();
       navigate('/order-success', { state: { orderId: res.data.id } });
+      toast.success('Order placed successfully!');
     } catch (error) {
       toast.error('Failed to place order. Please try again.');
     } finally {
@@ -67,146 +91,135 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Checkout</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Form */}
-        <div className="lg:col-span-2">
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-800 mb-6">Delivery Information</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Full Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your full name"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Phone Number *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  placeholder="07X XXX XXXX"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="your@email.com"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">District *</label>
-                <select
-                  name="district"
-                  value={formData.district}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400 bg-white"
-                >
-                  <option value="">Select District</option>
-                  {districts.map(d => (
-                    <option key={d} value={d}>{d}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Delivery Address *</label>
-                <textarea
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  required
-                  placeholder="Full delivery address"
-                  rows={3}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Order Notes (Optional)</label>
-                <textarea
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleChange}
-                  placeholder="Any special instructions..."
-                  rows={2}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400"
-                />
-              </div>
-            </div>
-
-            {/* Payment Method */}
-            <div className="mt-6 p-4 bg-amber-50 rounded-xl border border-amber-100">
-              <h3 className="font-medium text-gray-800 mb-2">Payment Method</h3>
-              <div className="flex items-center gap-3">
-                <div className="w-4 h-4 rounded-full bg-amber-700"></div>
-                <span className="text-gray-700">Cash on Delivery (COD)</span>
-              </div>
-              <p className="text-xs text-gray-500 mt-2">Pay when you receive your order</p>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-amber-700 text-white py-4 rounded-full font-medium hover:bg-amber-800 transition-colors mt-6 disabled:opacity-50"
-            >
-              {loading ? 'Placing Order...' : 'Place Order'}
-            </button>
-          </form>
+    <div style={{ width: '100%', overflowX: 'hidden' }}>
+      <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '40px 0' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
+          <h1 style={{ fontSize: '36px', fontWeight: '800', color: '#111827' }}>Checkout</h1>
+          <p style={{ color: '#6B7280', marginTop: '8px' }}>Complete your order details below</p>
         </div>
+      </section>
 
-        {/* Order Summary */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm sticky top-24">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Order Summary</h2>
-            <div className="space-y-3 mb-4">
-              {cartItems.map(item => (
-                <div key={item.id} className="flex justify-between text-sm">
-                  <span className="text-gray-500">{item.name} x{item.quantity}</span>
-                  <span className="font-medium">Rs. {(item.price * item.quantity).toLocaleString()}</span>
+      <section style={{ padding: '40px 0', backgroundColor: '#F9FAFB' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 0.7fr', gap: '32px' }}>
+
+            {/* Form */}
+            <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '40px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #F3F4F6' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1F2937', marginBottom: '28px' }}>Delivery Information</h2>
+
+              <form onSubmit={handleSubmit}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                  <div>
+                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Full Name *</label>
+                    <input
+                      type="text" name="name" value={formData.name}
+                      onChange={handleChange} required placeholder="Your full name"
+                      style={{ width: '100%', padding: '12px 16px', border: '1.5px solid #E5E7EB', borderRadius: '12px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Phone Number *</label>
+                    <input
+                      type="tel" name="phone" value={formData.phone}
+                      onChange={handleChange} required placeholder="07X XXX XXXX"
+                      style={{ width: '100%', padding: '12px 16px', border: '1.5px solid #E5E7EB', borderRadius: '12px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Email (for confirmation) </label>
+                    <input
+                      type="email" name="email" value={formData.email}
+                      onChange={handleChange} placeholder="your@email.com"
+                      style={{ width: '100%', padding: '12px 16px', border: '1.5px solid #E5E7EB', borderRadius: '12px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>District *</label>
+                    <select
+                      name="district" value={formData.district}
+                      onChange={handleChange} required
+                      style={{ width: '100%', padding: '12px 16px', border: '1.5px solid #E5E7EB', borderRadius: '12px', fontSize: '14px', outline: 'none', backgroundColor: 'white', boxSizing: 'border-box' }}
+                    >
+                      <option value="">Select District</option>
+                      {districts.map(d => <option key={d} value={d}>{d}</option>)}
+                    </select>
+                  </div>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Delivery Address *</label>
+                    <textarea
+                      name="address" value={formData.address}
+                      onChange={handleChange} required placeholder="Full delivery address"
+                      rows={3}
+                      style={{ width: '100%', padding: '12px 16px', border: '1.5px solid #E5E7EB', borderRadius: '12px', fontSize: '14px', outline: 'none', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }}
+                    />
+                  </div>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Order Notes (Optional)</label>
+                    <textarea
+                      name="notes" value={formData.notes}
+                      onChange={handleChange} placeholder="Any special instructions..."
+                      rows={2}
+                      style={{ width: '100%', padding: '12px 16px', border: '1.5px solid #E5E7EB', borderRadius: '12px', fontSize: '14px', outline: 'none', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }}
+                    />
+                  </div>
                 </div>
-              ))}
+
+                {/* Payment Method */}
+                <div style={{ backgroundColor: '#FFF8F0', borderRadius: '16px', padding: '20px', border: '1.5px solid #FFE0B2', marginBottom: '24px' }}>
+                  <h3 style={{ fontWeight: '600', color: '#1F2937', marginBottom: '12px', fontSize: '15px' }}>Payment Method</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: '#8B4513', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'white' }} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: '600', color: '#1F2937', fontSize: '14px' }}>Cash on Delivery (COD)</div>
+                      <div style={{ color: '#9CA3AF', fontSize: '12px', marginTop: '2px' }}>Pay when you receive your order</div>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="submit" disabled={loading}
+                  style={{ width: '100%', background: loading ? '#D1D5DB' : 'linear-gradient(135deg, #8B4513, #A0522D)', color: 'white', padding: '16px', borderRadius: '999px', fontWeight: '600', fontSize: '16px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer' }}
+                >
+                  {loading ? 'Placing Order...' : 'Place Order'}
+                </button>
+              </form>
             </div>
-            <div className="border-t border-gray-100 pt-4">
-              <div className="flex justify-between font-bold text-lg">
-                <span>Total</span>
-                <span className="text-amber-700">Rs. {cartTotal.toLocaleString()}</span>
+
+            {/* Order Summary */}
+            <div>
+              <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #F3F4F6', position: 'sticky', top: '24px' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1F2937', marginBottom: '20px' }}>Order Summary</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
+                  {cartItems.map(item => (
+                    <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+                      <span style={{ color: '#6B7280' }}>{item.name} x{item.quantity}</span>
+                      <span style={{ fontWeight: '500' }}>Rs. {(item.price * item.quantity).toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '18px' }}>
+                    <span>Total</span>
+                    <span style={{ color: '#8B4513' }}>Rs. {cartTotal.toLocaleString()}</span>
+                  </div>
+                  <p style={{ color: '#9CA3AF', fontSize: '12px', marginTop: '8px' }}>Delivery fee calculated upon confirmation</p>
+                </div>
+
+                <div style={{ backgroundColor: '#F0FDF4', borderRadius: '12px', padding: '16px', marginTop: '20px', border: '1px solid #BBF7D0' }}>
+                  <p style={{ color: '#166534', fontSize: '13px', margin: 0 }}>
+                    📧 A confirmation email will be sent to your email address after placing the order.
+                  </p>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
 
 export default Checkout;
-// chore: update 51 - 2026-06-15T12:20:23
-
-// chore: update 56 - 2026-06-14T09:56:09
-
-// chore: update 92 - 2026-06-15T15:41:52
-
-// chore: update 147 - 2026-06-11T02:34:28
