@@ -14,8 +14,10 @@ const Promotions = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    couponCode: '',
     discountType: 'percentage',
     discountValue: '',
+    minOrderAmount: '',
     startDate: '',
     endDate: '',
     active: true,
@@ -45,14 +47,16 @@ const Promotions = () => {
     try {
       await addDoc(collection(db, 'promotions'), {
         ...formData,
+        couponCode: formData.couponCode.toUpperCase().trim(),
         discountValue: parseFloat(formData.discountValue),
+        minOrderAmount: formData.minOrderAmount ? parseFloat(formData.minOrderAmount) : 0,
         createdAt: new Date().toISOString(),
       });
       toast.success('Promotion created!');
       setShowForm(false);
       setFormData({
-        title: '', description: '', discountType: 'percentage',
-        discountValue: '', startDate: '', endDate: '', active: true,
+        title: '', description: '', couponCode: '', discountType: 'percentage',
+        discountValue: '', minOrderAmount: '', startDate: '', endDate: '', active: true,
       });
       fetchPromotions();
     } catch (error) {
@@ -100,6 +104,12 @@ const Promotions = () => {
                   </button>
                 </div>
                 <p className="text-gray-500 text-sm mb-3">{promo.description}</p>
+                {promo.couponCode && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-3 flex items-center gap-2">
+                    <span className="text-xs text-amber-600 font-medium">Coupon Code:</span>
+                    <span className="font-mono font-bold text-amber-800 tracking-wider">{promo.couponCode}</span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between">
                   <span className="text-amber-700 font-bold text-lg">
                     {promo.discountValue}
@@ -111,8 +121,11 @@ const Promotions = () => {
                     {promo.active ? 'Active' : 'Inactive'}
                   </span>
                 </div>
+                {promo.minOrderAmount > 0 && (
+                  <p className="text-xs text-gray-400 mt-2">Min. order: Rs. {promo.minOrderAmount?.toLocaleString()}</p>
+                )}
                 {promo.endDate && (
-                  <p className="text-xs text-gray-400 mt-2">Ends: {promo.endDate}</p>
+                  <p className="text-xs text-gray-400 mt-1">Ends: {promo.endDate}</p>
                 )}
               </div>
             ))}
@@ -153,6 +166,16 @@ const Promotions = () => {
                 />
               </div>
 
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">Coupon Code *</label>
+                <input
+                  type="text" name="couponCode" value={formData.couponCode}
+                  onChange={handleChange} required placeholder="e.g. SAVE20"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400 uppercase font-mono tracking-wider"
+                />
+                <p className="text-xs text-gray-400 mt-1">Customers will enter this code at checkout</p>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-1 block">Discount Type</label>
@@ -173,6 +196,15 @@ const Promotions = () => {
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">Minimum Order Amount (Rs.)</label>
+                <input
+                  type="number" name="minOrderAmount" value={formData.minOrderAmount}
+                  onChange={handleChange} placeholder="0 = no minimum"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">

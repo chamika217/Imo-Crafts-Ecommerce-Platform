@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import emailjs from '@emailjs/browser';
 import toast from 'react-hot-toast';
 import { ArrowRight } from 'lucide-react';
 
@@ -16,6 +17,34 @@ const CustomOrder = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const sendInquiryEmail = async (inquiryData) => {
+    try {
+      if (!inquiryData.email) return;
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          customer_name: inquiryData.name,
+          customer_email: inquiryData.email,
+          order_id: 'CUSTOM-' + Date.now().toString().slice(-6),
+          order_items: `Custom Order Inquiry\nDescription: ${inquiryData.description}\nQuantity: ${inquiryData.quantity || 'N/A'}\nBudget: ${inquiryData.budget ? 'Rs. ' + inquiryData.budget : 'N/A'}\nEvent Date: ${inquiryData.eventDate || 'N/A'}`,
+          subtotal: inquiryData.budget ? `Rs. ${inquiryData.budget}` : 'TBD',
+          discount_line: '',
+          coupon_code: '',
+          discount_amount: '',
+          order_total: 'To be quoted',
+          delivery_address: 'To be confirmed',
+          district: 'To be confirmed',
+          phone: inquiryData.phone,
+          payment_method: 'To be confirmed',
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+    } catch (error) {
+      console.error('Inquiry email failed:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,6 +56,7 @@ const CustomOrder = () => {
         budget: formData.budget,
         quantity: formData.quantity,
       });
+      await sendInquiryEmail(formData);
       toast.success('Your inquiry has been submitted! We will contact you soon.');
       setFormData({ name: '', phone: '', email: '', eventDate: '', description: '', budget: '', quantity: '' });
     } catch (error) {

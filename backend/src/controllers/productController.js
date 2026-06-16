@@ -1,4 +1,7 @@
 import { db } from '../config/firebase.js';
+import { sendLowStockAlert } from '../services/emailService.js';
+
+const LOW_STOCK_THRESHOLD = 5;
 
 // Get all products
 export const getAllProducts = async (req, res) => {
@@ -86,6 +89,20 @@ export const updateProduct = async (req, res) => {
       updatedAt: new Date().toISOString(),
     };
     await db.collection('products').doc(req.params.id).update(updateData);
+
+    // Check if stock was updated and send alert if low
+    if (req.body.stockQty !== undefined) {
+      const newQty = Number(req.body.stockQty);
+      if (newQty <= LOW_STOCK_THRESHOLD) {
+        const doc = await db.collection('products').doc(req.params.id).get();
+        const product = { id: doc.id, ...doc.data() };
+        sendLowStockAlert({
+          products: [{ ...product, stockQty: newQty }],
+          adminEmail: process.env.ADMIN_EMAIL,
+        }).catch(err => console.error('Low stock email failed:', err));
+      }
+    }
+
     res.status(200).json({ id: req.params.id, ...updateData });
   } catch (error) {
     res.status(500).json({ message: error.message });

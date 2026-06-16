@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import axios from 'axios';
 import ProductCard from '../../components/ui/ProductCard';
+import SEO from '../../components/SEO';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -49,6 +50,11 @@ const Shop = () => {
 
   return (
     <div style={{ width: '100%', overflowX: 'hidden' }}>
+      <SEO
+        title="Shop — Handmade Crafts & Gifts"
+        description="Browse our full collection of handmade crafts, resin art, personalized gifts and home decor. Shop online and get island-wide delivery."
+        url="/shop"
+      />
 
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '48px 0' }}>

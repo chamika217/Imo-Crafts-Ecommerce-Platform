@@ -7,7 +7,7 @@ import {
   deleteProduct,
   getFeaturedProducts,
 } from '../controllers/productController.js';
-import { verifyAdmin } from '../middleware/authMiddleware.js';
+import { verifyAdmin, requireRole } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -16,14 +16,9 @@ router.get('/', getAllProducts);
 router.get('/featured', getFeaturedProducts);
 router.get('/:id', getProductById);
 
-// Admin routes
-router.post('/', verifyAdmin, createProduct);
-router.put('/:id', verifyAdmin, updateProduct);
-router.delete('/:id', verifyAdmin, deleteProduct);
+// inventoryManager + contentManager + superAdmin can manage products
+router.post('/', verifyAdmin, requireRole('inventoryManager', 'contentManager'), createProduct);
+router.put('/:id', verifyAdmin, requireRole('inventoryManager', 'contentManager'), updateProduct);
+router.delete('/:id', verifyAdmin, requireRole('inventoryManager', 'contentManager'), deleteProduct);
 
 export default router;
-// chore: update 63 - 2026-06-15T18:04:13
-
-// chore: update 107 - 2026-06-14T21:44:16
-
-// chore: update 121 - 2026-06-10T17:30:20

@@ -10,6 +10,8 @@ export const CartProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+
   useEffect(() => {
     localStorage.setItem('imo-crafts-cart', JSON.stringify(cartItems));
   }, [cartItems]);
@@ -44,11 +46,25 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const clearCart = () => setCartItems([]);
+  const clearCart = () => {
+    setCartItems([]);
+    setAppliedCoupon(null);
+  };
+
+  const applyCoupon = (couponData) => {
+    setAppliedCoupon(couponData);
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+  };
 
   const cartTotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity, 0
   );
+
+  const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0;
+  const finalTotal = cartTotal - discountAmount;
 
   const cartCount = cartItems.reduce(
     (count, item) => count + item.quantity, 0
@@ -62,6 +78,11 @@ export const CartProvider = ({ children }) => {
     clearCart,
     cartTotal,
     cartCount,
+    appliedCoupon,
+    applyCoupon,
+    removeCoupon,
+    discountAmount,
+    finalTotal,
   };
 
   return (
@@ -70,4 +91,3 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-// chore: update 59 - 2026-06-14T00:18:31

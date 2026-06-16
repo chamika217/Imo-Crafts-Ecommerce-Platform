@@ -13,6 +13,8 @@ import Inquiries from './pages/admin/Inquiries';
 import Media from './pages/admin/Media';
 import Promotions from './pages/admin/Promotions';
 import Reports from './pages/admin/Reports';
+import Reviews from './pages/admin/Reviews';
+import Users from './pages/admin/Users';
 
 // Layout
 import AdminSidebar from './components/layout/AdminSidebar';
@@ -66,6 +68,8 @@ function App() {
             <Route path="media" element={<Media />} />
             <Route path="promotions" element={<Promotions />} />
             <Route path="reports" element={<Reports />} />
+            <Route path="reviews" element={<Reviews />} />
+            <Route path="users" element={<Users />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/admin/login" replace />} />

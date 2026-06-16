@@ -10,6 +10,7 @@ const navLinks = [
   { to: '/home', label: 'Home' },
   { to: '/shop', label: 'Shop' },
   { to: '/custom-order', label: 'Custom Orders' },
+  { to: '/reviews', label: 'Reviews' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ];

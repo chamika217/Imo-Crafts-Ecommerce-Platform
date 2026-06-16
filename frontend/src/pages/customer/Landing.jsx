@@ -1,6 +1,7 @@
 import { Link, Navigate } from 'react-router-dom';
 import { ArrowRight, Truck, Shield, Sparkles, Star, Gift } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import SEO from '../../components/SEO';
 
 const features = [
   { icon: Gift, title: 'Handmade Gifts', desc: 'Unique crafts for every special occasion' },
@@ -33,6 +34,11 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
+      <SEO
+        title="Handmade Crafts & Gifts Sri Lanka"
+        description="Discover beautifully handmade crafts, personalized gifts, and custom decorations. Made with love, delivered island-wide across Sri Lanka."
+        url="/"
+      />
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#E8DDD0]">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">

@@ -4,6 +4,7 @@ import { ShoppingCart, ArrowLeft, Truck, Shield } from 'lucide-react';
 import axios from 'axios';
 import { useCart } from '../../context/CartContext';
 import toast from 'react-hot-toast';
+import SEO from '../../components/SEO';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -56,6 +57,19 @@ const ProductDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SEO
+        title={product.name}
+        description={product.description || `Buy ${product.name} - Rs. ${product.price?.toLocaleString()}. Handmade with love. Island-wide delivery available.`}
+        image={product.images?.[0]}
+        url={`/shop/${id}`}
+        type="product"
+        product={product}
+        breadcrumbs={[
+          { name: 'Home', path: '/home' },
+          { name: 'Shop', path: '/shop' },
+          { name: product.name, path: `/shop/${id}` },
+        ]}
+      />
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}

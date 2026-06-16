@@ -1,15 +1,76 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Truck, Shield, Phone } from 'lucide-react';
+import { ArrowRight, Truck, Shield, Phone, Star } from 'lucide-react';
 import axios from 'axios';
+import { db } from '../../firebase/config';
+import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
 import ProductCard from '../../components/ui/ProductCard';
+import SEO from '../../components/SEO';
 import resin1 from '../../assets/resin1.jpg';
 import resin2 from '../../assets/resin2.jpg';
 import resin3 from '../../assets/resin3.jpg';
 
 const API_URL = import.meta.env.VITE_API_URL;
-
 const heroImages = [resin1, resin2, resin3];
+
+const TestimonialsSection = () => {
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const q = query(
+          collection(db, 'reviews'),
+          where('approved', '==', true),
+          orderBy('createdAt', 'desc'),
+          limit(3)
+        );
+        const snap = await getDocs(q);
+        setReviews(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      } catch (e) { /* silent */ }
+    };
+    fetch();
+  }, []);
+
+  if (reviews.length === 0) return null;
+
+  return (
+    <section style={{ padding: '64px 0', backgroundColor: 'white' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
+          <div>
+            <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1F2937', marginBottom: '4px' }}>What Customers Say</h2>
+            <p style={{ color: '#9CA3AF' }}>Real reviews from our happy customers</p>
+          </div>
+          <Link to="/reviews" style={{ color: '#8B4513', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500', textDecoration: 'none' }}>
+            All Reviews <ArrowRight size={16} />
+          </Link>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+          {reviews.map(review => (
+            <div key={review.id} style={{ backgroundColor: '#FFFBF7', borderRadius: '20px', padding: '28px', border: '1px solid #F3E8DC' }}>
+              <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
+                {[1,2,3,4,5].map(s => (
+                  <Star key={s} size={16} fill={s <= review.rating ? '#F59E0B' : 'none'} stroke={s <= review.rating ? '#F59E0B' : '#E5E7EB'} strokeWidth={1.5} />
+                ))}
+              </div>
+              <p style={{ color: '#374151', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px', fontStyle: 'italic' }}>"{review.review}"</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #8B4513, #D4A574)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '700', fontSize: '14px' }}>
+                  {review.customerName?.[0]?.toUpperCase() || 'A'}
+                </div>
+                <div>
+                  <div style={{ fontWeight: '600', color: '#1F2937', fontSize: '14px' }}>{review.customerName}</div>
+                  {review.productName && <div style={{ fontSize: '12px', color: '#9CA3AF' }}>{review.productName}</div>}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -46,6 +107,11 @@ const Home = () => {
 
   return (
     <div style={{ width: '100%', overflowX: 'hidden' }}>
+      <SEO
+        title="Home — Shop Handmade Crafts"
+        description="Shop handmade resin art, personalized gifts, home decor and custom crafts. Browse our featured collection and place your order online."
+        url="/home"
+      />
 
       {/* Hero Section */}
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 50%, #FFE0B2 100%)', width: '100%', padding: '80px 0' }}>
@@ -241,6 +307,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
 
       {/* CTA Section */}
       <section style={{ padding: '80px 0', background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}>

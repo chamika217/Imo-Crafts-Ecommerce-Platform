@@ -4,13 +4,16 @@ import { useCart } from '../../context/CartContext';
 import axios from 'axios';
 import emailjs from '@emailjs/browser';
 import toast from 'react-hot-toast';
+import { Tag, X, CheckCircle } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Checkout = () => {
-  const { cartItems, cartTotal, clearCart } = useCart();
+  const { cartItems, cartTotal, finalTotal, discountAmount, appliedCoupon, applyCoupon, removeCoupon, clearCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -32,9 +35,42 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    try {
+      const res = await axios.post(`${API_URL}/promotions/validate`, {
+        code: couponCode.trim(),
+        orderTotal: cartTotal,
+      });
+      applyCoupon(res.data);
+      toast.success(`Coupon applied! Rs. ${res.data.discountAmount.toLocaleString()} discount`);
+      setCouponCode('');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Invalid coupon code');
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    removeCoupon();
+    toast.success('Coupon removed');
+  };
+
   const sendConfirmationEmail = async (orderId) => {
     try {
       if (!formData.email) return;
+
+      // Build items list text
+      const itemsList = cartItems
+        .map(item => `${item.name} x${item.quantity} — Rs. ${(item.price * item.quantity).toLocaleString()}`)
+        .join('\n');
+
+      const discountLine = appliedCoupon
+        ? `Discount (${appliedCoupon.couponCode}): - Rs. ${discountAmount.toLocaleString()}\n`
+        : '';
+
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
@@ -42,9 +78,16 @@ const Checkout = () => {
           customer_name: formData.name,
           customer_email: formData.email,
           order_id: orderId.slice(-8).toUpperCase(),
-          order_total: cartTotal.toLocaleString(),
+          order_items: itemsList,
+          subtotal: `Rs. ${cartTotal.toLocaleString()}`,
+          discount_line: discountLine,
+          coupon_code: appliedCoupon?.couponCode || '',
+          discount_amount: appliedCoupon ? `Rs. ${discountAmount.toLocaleString()}` : '',
+          order_total: `Rs. ${finalTotal.toLocaleString()}`,
           delivery_address: formData.address,
           district: formData.district,
+          phone: formData.phone,
+          payment_method: 'Cash on Delivery (COD)',
         },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
@@ -73,8 +116,11 @@ const Checkout = () => {
           image: item.images?.[0] || '',
         })),
         subtotal: cartTotal,
+        discountAmount: discountAmount,
+        couponCode: appliedCoupon?.couponCode || null,
+        discountType: appliedCoupon?.discountType || null,
         deliveryFee: 0,
-        total: cartTotal,
+        total: finalTotal,
         paymentMethod: 'COD',
       };
 
@@ -126,7 +172,7 @@ const Checkout = () => {
                     />
                   </div>
                   <div>
-                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Email (for confirmation) </label>
+                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Email (for confirmation)</label>
                     <input
                       type="email" name="email" value={formData.email}
                       onChange={handleChange} placeholder="your@email.com"
@@ -164,6 +210,51 @@ const Checkout = () => {
                   </div>
                 </div>
 
+                {/* Coupon Code */}
+                <div style={{ backgroundColor: '#FAFAFA', borderRadius: '16px', padding: '20px', border: '1.5px solid #F3F4F6', marginBottom: '20px' }}>
+                  <h3 style={{ fontWeight: '600', color: '#1F2937', marginBottom: '12px', fontSize: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Tag size={16} color="#8B4513" /> Coupon Code
+                  </h3>
+
+                  {appliedCoupon ? (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#F0FDF4', border: '1.5px solid #BBF7D0', borderRadius: '12px', padding: '12px 16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <CheckCircle size={18} color="#16A34A" />
+                        <div>
+                          <span style={{ fontFamily: 'monospace', fontWeight: '700', color: '#166534', letterSpacing: '0.1em' }}>{appliedCoupon.couponCode}</span>
+                          <span style={{ color: '#16A34A', fontSize: '13px', marginLeft: '8px' }}>— {appliedCoupon.title}</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleRemoveCoupon}
+                        style={{ color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleApplyCoupon())}
+                        placeholder="Enter coupon code"
+                        style={{ flex: 1, padding: '12px 16px', border: '1.5px solid #E5E7EB', borderRadius: '12px', fontSize: '14px', outline: 'none', fontFamily: 'monospace', letterSpacing: '0.05em', boxSizing: 'border-box' }}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleApplyCoupon}
+                        disabled={couponLoading || !couponCode.trim()}
+                        style={{ padding: '12px 20px', backgroundColor: couponLoading || !couponCode.trim() ? '#D1D5DB' : '#8B4513', color: 'white', borderRadius: '12px', border: 'none', cursor: couponLoading || !couponCode.trim() ? 'not-allowed' : 'pointer', fontWeight: '600', fontSize: '14px', whiteSpace: 'nowrap' }}
+                      >
+                        {couponLoading ? '...' : 'Apply'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Payment Method */}
                 <div style={{ backgroundColor: '#FFF8F0', borderRadius: '16px', padding: '20px', border: '1.5px solid #FFE0B2', marginBottom: '24px' }}>
                   <h3 style={{ fontWeight: '600', color: '#1F2937', marginBottom: '12px', fontSize: '15px' }}>Payment Method</h3>
@@ -199,12 +290,27 @@ const Checkout = () => {
                     </div>
                   ))}
                 </div>
-                <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '18px' }}>
-                    <span>Total</span>
-                    <span style={{ color: '#8B4513' }}>Rs. {cartTotal.toLocaleString()}</span>
+
+                <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#6B7280' }}>
+                    <span>Subtotal</span>
+                    <span>Rs. {cartTotal.toLocaleString()}</span>
                   </div>
-                  <p style={{ color: '#9CA3AF', fontSize: '12px', marginTop: '8px' }}>Delivery fee calculated upon confirmation</p>
+
+                  {appliedCoupon && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#16A34A' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Tag size={13} /> {appliedCoupon.couponCode}
+                      </span>
+                      <span>- Rs. {discountAmount.toLocaleString()}</span>
+                    </div>
+                  )}
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '18px', marginTop: '4px', paddingTop: '8px', borderTop: appliedCoupon ? '1px solid #F3F4F6' : 'none' }}>
+                    <span>Total</span>
+                    <span style={{ color: '#8B4513' }}>Rs. {finalTotal.toLocaleString()}</span>
+                  </div>
+                  <p style={{ color: '#9CA3AF', fontSize: '12px', marginTop: '4px' }}>Delivery fee calculated upon confirmation</p>
                 </div>
 
                 <div style={{ backgroundColor: '#F0FDF4', borderRadius: '12px', padding: '16px', marginTop: '20px', border: '1px solid #BBF7D0' }}>

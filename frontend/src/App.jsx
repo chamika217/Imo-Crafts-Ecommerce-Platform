@@ -15,6 +15,7 @@ import OrderSuccess from './pages/customer/OrderSuccess';
 import CustomOrder from './pages/customer/CustomOrder';
 import About from './pages/customer/About';
 import Contact from './pages/customer/Contact';
+import Reviews from './pages/customer/Reviews';
 
 // Admin Pages
 import AdminLogin from './pages/admin/Login';
@@ -110,6 +111,7 @@ function App() {
             <Route path="/custom-order" element={<ProtectedRoute><CustomerLayout><CustomOrder /></CustomerLayout></ProtectedRoute>} />
             <Route path="/about" element={<ProtectedRoute><CustomerLayout><About /></CustomerLayout></ProtectedRoute>} />
             <Route path="/contact" element={<ProtectedRoute><CustomerLayout><Contact /></CustomerLayout></ProtectedRoute>} />
+            <Route path="/reviews" element={<ProtectedRoute><CustomerLayout><Reviews /></CustomerLayout></ProtectedRoute>} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />

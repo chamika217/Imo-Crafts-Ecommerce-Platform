@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import logo from '../../assets/logo.png';
+import SEO from '../../components/SEO';
 
 const About = () => {
   return (
     <div style={{ width: '100%', overflowX: 'hidden' }}>
+      <SEO
+        title="About Us"
+        description="Learn about Imo Crafts — a Sri Lankan handmade crafts brand creating beautiful resin art, personalized gifts, and custom decorations with love."
+        url="/about"
+      />
 
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '80px 0' }}>

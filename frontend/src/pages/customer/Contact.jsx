@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Phone, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
+import SEO from '../../components/SEO';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', message: '' });
@@ -24,6 +25,11 @@ const Contact = () => {
 
   return (
     <div style={{ width: '100%', overflowX: 'hidden' }}>
+      <SEO
+        title="Contact Us"
+        description="Get in touch with Imo Crafts. Contact us for custom orders, inquiries, or support. We reply within 24 hours."
+        url="/contact"
+      />
 
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '64px 0' }}>
