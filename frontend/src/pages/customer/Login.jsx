@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -38,7 +38,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       <div
@@ -51,15 +50,7 @@ const Login = () => {
         </div>
 
         <div className="relative flex flex-col justify-between w-full p-10 xl:p-14">
-          <div className="flex items-center gap-3">
-            <span className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-2xl border border-white/15">
-              🎨
-            </span>
-            <div>
-              <h1 className="text-xl font-bold text-white">Imo Crafts</h1>
-              <p className="text-amber-200/60 text-xs font-medium uppercase tracking-widest mt-0.5">Handmade Gifts</p>
-            </div>
-          </div>
+          <div></div>
 
           <div className="py-10">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/10 text-amber-100 text-xs font-medium px-3 py-1.5 rounded-full mb-6">
@@ -214,6 +205,22 @@ const Login = () => {
                       </>
                     )}
                   </button>
+
+                  <div className="relative my-4">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-[#E8DDD0]" />
+                    </div>
+                    <div className="relative flex justify-center text-xs">
+                      <span className="px-3 bg-white text-[#A89584]">or</span>
+                    </div>
+                  </div>
+
+                  <Link
+                    to="/home"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm border-2 border-[#E8DDD0] text-[#8B4513] hover:bg-[#FFF8F0] transition-colors"
+                  >
+                    Continue as Guest →
+                  </Link>
                 </div>
               </form>
             </div>

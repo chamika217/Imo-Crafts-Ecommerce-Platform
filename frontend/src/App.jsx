@@ -1,6 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
 // Customer Pages
@@ -51,43 +51,6 @@ const AdminLayout = ({ children }) => (
   </div>
 );
 
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-  const location = useLocation();
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F7F2EC] text-[#8B4513]">
-        Loading...
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
-  }
-
-  return children;
-};
-
-const GuestRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F7F2EC] text-[#8B4513]">
-        Loading...
-      </div>
-    );
-  }
-
-  if (user) {
-    return <Navigate to="/home" replace />;
-  }
-
-  return children;
-};
-
 function App() {
   return (
     <AuthProvider>
@@ -95,23 +58,23 @@ function App() {
         <Router>
           <Toaster position="top-right" />
           <Routes>
-            {/* Public Landing */}
-            <Route path="/" element={<Landing />} />
+            {/* Landing → directly to home/shop */}
+            <Route path="/" element={<Navigate to="/home" replace />} />
 
-            {/* Customer Login */}
-            <Route path="/login" element={<GuestRoute><CustomerLogin /></GuestRoute>} />
+            {/* Optional login (not required) */}
+            <Route path="/login" element={<CustomerLayout><CustomerLogin /></CustomerLayout>} />
 
-            {/* Customer Routes (protected) */}
-            <Route path="/home" element={<ProtectedRoute><CustomerLayout><Home /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/shop" element={<ProtectedRoute><CustomerLayout><Shop /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/shop/:id" element={<ProtectedRoute><CustomerLayout><ProductDetail /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/cart" element={<ProtectedRoute><CustomerLayout><Cart /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/checkout" element={<ProtectedRoute><CustomerLayout><Checkout /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/order-success" element={<ProtectedRoute><CustomerLayout><OrderSuccess /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/custom-order" element={<ProtectedRoute><CustomerLayout><CustomOrder /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/about" element={<ProtectedRoute><CustomerLayout><About /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/contact" element={<ProtectedRoute><CustomerLayout><Contact /></CustomerLayout></ProtectedRoute>} />
-            <Route path="/reviews" element={<ProtectedRoute><CustomerLayout><Reviews /></CustomerLayout></ProtectedRoute>} />
+            {/* All customer routes are PUBLIC - no login required */}
+            <Route path="/home" element={<CustomerLayout><Home /></CustomerLayout>} />
+            <Route path="/shop" element={<CustomerLayout><Shop /></CustomerLayout>} />
+            <Route path="/shop/:id" element={<CustomerLayout><ProductDetail /></CustomerLayout>} />
+            <Route path="/cart" element={<CustomerLayout><Cart /></CustomerLayout>} />
+            <Route path="/checkout" element={<CustomerLayout><Checkout /></CustomerLayout>} />
+            <Route path="/order-success" element={<CustomerLayout><OrderSuccess /></CustomerLayout>} />
+            <Route path="/custom-order" element={<CustomerLayout><CustomOrder /></CustomerLayout>} />
+            <Route path="/about" element={<CustomerLayout><About /></CustomerLayout>} />
+            <Route path="/contact" element={<CustomerLayout><Contact /></CustomerLayout>} />
+            <Route path="/reviews" element={<CustomerLayout><Reviews /></CustomerLayout>} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -132,5 +95,3 @@ function App() {
 }
 
 export default App;
-
-// chore: update 41 - 2026-06-11T10:35:15

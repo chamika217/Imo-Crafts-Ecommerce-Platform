@@ -4,9 +4,7 @@ import { collection, getDocs, addDoc, query, orderBy, where } from 'firebase/fir
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 import { Star, MessageSquare, CheckCircle } from 'lucide-react';
-import SEO from '../../components/SEO';
-
-const Reviews = () => {
+import SEO from '../../components/SEO';const Reviews = () => {
   const { user } = useAuth();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,6 +12,7 @@ const Reviews = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [hoverRating, setHoverRating] = useState(0);
+  const [guestName, setGuestName] = useState('');
   const [formData, setFormData] = useState({
     rating: 0,
     title: '',
@@ -49,7 +48,7 @@ const Reviews = () => {
     try {
       await addDoc(collection(db, 'reviews'), {
         ...formData,
-        customerName: user?.displayName || user?.email?.split('@')[0] || 'Anonymous',
+        customerName: user?.displayName || user?.email?.split('@')[0] || guestName || 'Anonymous',
         customerEmail: user?.email || '',
         approved: false,
         createdAt: new Date().toISOString(),
@@ -156,7 +155,13 @@ const Reviews = () => {
               </div>
             ) : (
               <button
-                onClick={() => setShowForm(!showForm)}
+                onClick={() => {
+                  if (!user) {
+                    toast.error('Please login to write a review');
+                    return;
+                  }
+                  setShowForm(!showForm);
+                }}
                 style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)', color: 'white', padding: '12px 28px', borderRadius: '999px', fontWeight: '600', fontSize: '15px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
               >
                 <MessageSquare size={16} /> Write a Review
@@ -169,6 +174,19 @@ const Reviews = () => {
             <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '36px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #F3F4F6', marginBottom: '32px' }}>
               <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1F2937', marginBottom: '24px' }}>Share Your Experience</h3>
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                {/* Guest name if not logged in */}
+                {!user && (
+                  <div>
+                    <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Your Name *</label>
+                    <input
+                      type="text" value={guestName} required
+                      onChange={(e) => setGuestName(e.target.value)}
+                      placeholder="Enter your name"
+                      style={{ width: '100%', padding: '12px 16px', border: '1.5px solid #E5E7EB', borderRadius: '12px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                )}
 
                 <div>
                   <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '10px' }}>Your Rating *</label>

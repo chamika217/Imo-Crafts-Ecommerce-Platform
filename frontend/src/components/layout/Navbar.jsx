@@ -110,19 +110,29 @@ const Navbar = () => {
               )}
             </Link>
 
-            <div className="flex items-center gap-2 pl-1 border-l border-[#E8DDD0]">
-              <span className="hidden xl:flex items-center gap-1.5 text-xs text-gray-500 max-w-[120px] truncate">
-                <User size={14} />
-                {user?.displayName || user?.email?.split('@')[0]}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-[#FAF6F1] border border-[#E8DDD0] text-gray-600 hover:text-red-600 hover:border-red-200 transition-colors"
-                title="Logout"
+            {user ? (
+              <div className="flex items-center gap-2 pl-1 border-l border-[#E8DDD0]">
+                <span className="hidden xl:flex items-center gap-1.5 text-xs text-gray-500 max-w-[120px] truncate">
+                  <User size={14} />
+                  {user?.displayName || user?.email?.split('@')[0]}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="w-10 h-10 rounded-full flex items-center justify-center bg-[#FAF6F1] border border-[#E8DDD0] text-gray-600 hover:text-red-600 hover:border-red-200 transition-colors"
+                  title="Logout"
+                >
+                  <LogOut size={18} />
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-colors"
+                style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}
               >
-                <LogOut size={18} />
-              </button>
-            </div>
+                <User size={15} /> Login
+              </Link>
+            )}
           </div>
         </div>
 
@@ -186,13 +196,24 @@ const Navbar = () => {
                   </button>
                 </div>
               </form>
-              <button
-                onClick={handleLogout}
-                className="mt-2 mx-1 flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
-              >
-                <LogOut size={16} />
-                Logout
-              </button>
+              {user ? (
+                <button
+                  onClick={handleLogout}
+                  className="mt-2 mx-1 flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="mt-2 mx-1 flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-white transition-colors"
+                  style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}
+                >
+                  <User size={16} /> Login / Register
+                </Link>
+              )}
             </div>
           </div>
         )}

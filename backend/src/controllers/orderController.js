@@ -100,6 +100,27 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
+// PayHere payment notification (server-side callback)
+export const payhereNotify = async (req, res) => {
+  try {
+    const { order_id, status_code, payment_id } = req.body;
+
+    // status_code 2 = success
+    if (status_code === '2' && order_id) {
+      await db.collection('orders').doc(order_id).update({
+        paymentStatus: 'Paid',
+        orderStatus: 'Confirmed',
+        transactionId: payment_id || null,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    res.status(200).send('OK');
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Delete order
 export const deleteOrder = async (req, res) => {
   try {

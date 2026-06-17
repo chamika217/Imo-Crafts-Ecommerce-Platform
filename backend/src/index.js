@@ -9,6 +9,7 @@ import inquiryRoutes from './routes/inquiryRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import promotionRoutes from './routes/promotionRoutes.js';
 import adminUserRoutes from './routes/adminUserRoutes.js';
+import payhereRoutes from './routes/payhereRoutes.js';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/admin-users', adminUserRoutes);
+app.use('/api/payhere', payhereRoutes);
 
 // Health check
 app.get('/', (req, res) => {

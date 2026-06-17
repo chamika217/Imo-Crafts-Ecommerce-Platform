@@ -103,6 +103,7 @@ imo-crafts/
 | **Image Storage** | Cloudinary |
 | **Email** | EmailJS (order confirmations) + Nodemailer (admin alerts) |
 | **SEO** | react-helmet-async |
+| **Payment** | PayHere (Visa / Mastercard / Amex) |
 | **Icons** | Lucide React |
 
 ---
@@ -117,6 +118,7 @@ imo-crafts/
 - Shopping cart with persistent localStorage
 - **Coupon code** input at checkout with real-time discount calculation
 - Cash on Delivery (COD) checkout with district-based delivery
+- **Card / Online Payment** via PayHere (Visa, Mastercard, Amex) — sandbox & production support
 - **Order confirmation email** sent via EmailJS with itemised order details
 - Custom order inquiry form with **email acknowledgment**
 - **Customer reviews** page — write, rate, and browse testimonials
@@ -236,6 +238,11 @@ VITE_API_URL=http://localhost:5000/api
 VITE_EMAILJS_SERVICE_ID=...
 VITE_EMAILJS_TEMPLATE_ID=...
 VITE_EMAILJS_PUBLIC_KEY=...
+
+# PayHere Payment Gateway
+# Use 1228172 for sandbox testing
+# Get live Merchant ID from https://www.payhere.lk
+VITE_PAYHERE_MERCHANT_ID=1228172
 ```
 
 Run:
@@ -258,6 +265,27 @@ Run:
 ```bash
 npm run dev
 ```
+
+---
+
+## 💳 PayHere Payment Setup
+
+### Sandbox Testing
+No registration needed for sandbox. Use these test credentials:
+
+| Field | Value |
+|---|---|
+| Merchant ID | `1228172` (default in `.env`) |
+| Test Card | `4916217501611292` |
+| CVV | `100` |
+| Expiry | `02/27` |
+| OTP | `123456` |
+
+### Going Live
+1. Register at [payhere.lk](https://www.payhere.lk) and get your **Merchant ID**
+2. Update `VITE_PAYHERE_MERCHANT_ID` in `frontend/.env`
+3. In `Checkout.jsx` change `sandbox: true` → `sandbox: false`
+4. Add your deployed backend URL as **Notify URL** in PayHere dashboard: `https://your-api.com/api/orders/payhere-notify`
 
 ---
 
@@ -340,6 +368,7 @@ Update your EmailJS template (`template_xxxxx`) to use these variables:
 - ✅ **Reviews / Testimonials** — Customer review page with star ratings. Admin approval workflow. Top 3 approved reviews shown on Home page.
 - ✅ **SEO Meta Tags** — `react-helmet-async` SEO component on all pages. Product pages include JSON-LD `Product` + `BreadcrumbList` structured data.
 - ✅ **Role-Based Permissions** — 4 roles (Super Admin, Staff, Inventory Manager, Content Manager) via Firebase custom claims. Sidebar and API routes filtered per role. Admin Users management page.
+- ✅ **Card Payment (PayHere)** — Visa/Mastercard/Amex via PayHere. COD and Card selectable at checkout. Sandbox mode for testing included.
 
 ---
 

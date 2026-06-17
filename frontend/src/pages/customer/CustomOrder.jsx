@@ -1,12 +1,16 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import emailjs from '@emailjs/browser';
 import toast from 'react-hot-toast';
 import { ArrowRight } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const CustomOrder = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '', phone: '', email: '',
@@ -47,6 +51,11 @@ const CustomOrder = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      toast.error('Please login to submit a custom order');
+      navigate('/login');
+      return;
+    }
     setLoading(true);
     try {
       await axios.post(`${API_URL}/inquiries`, {

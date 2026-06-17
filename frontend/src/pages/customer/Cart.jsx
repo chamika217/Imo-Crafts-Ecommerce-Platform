@@ -1,10 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    if (!user) {
+      toast.error('Please login to proceed to checkout');
+      navigate('/login');
+      return;
+    }
+    navigate('/checkout');
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -109,7 +121,7 @@ const Cart = () => {
             </div>
 
             <button
-              onClick={() => navigate('/checkout')}
+              onClick={handleCheckout}
               className="w-full bg-amber-700 text-white py-3 rounded-full font-medium hover:bg-amber-800 transition-colors"
             >
               Proceed to Checkout
