@@ -35,6 +35,7 @@ imo-crafts/
 │   │   │   ├── customerController.js
 │   │   │   ├── inquiryController.js
 │   │   │   ├── promotionController.js   # Coupon validation
+│   │   │   ├── payhereController.js     # PayHere hash generation
 │   │   │   ├── adminUserController.js   # Role-based user management
 │   │   │   └── uploadController.js
 │   │   ├── middleware/
@@ -76,7 +77,7 @@ imo-crafts/
         │   └── AuthContext.jsx          # Role-aware auth + hasPermission()
         ├── firebase/          # Firebase client config
         └── pages/admin/
-            ├── Dashboard.jsx
+            ├── Dashboard.jsx  # Role-aware stats & widgets
             ├── Products.jsx
             ├── Orders.jsx
             ├── Customers.jsx
@@ -112,6 +113,9 @@ imo-crafts/
 
 ### 🛍️ Customer Storefront
 
+- **No login required** to browse — guests can view all products, categories, reviews, about, and contact pages
+- Login / Register required only for: Add to Cart, Checkout, Place Order, Custom Order, Write Review
+- Login page with "Continue as Guest →" option
 - Browse products by category (Handmade Gifts, Event & Party, Home Decor, Custom Orders)
 - Search and sort products (latest, price low–high, high–low)
 - Product detail pages with image gallery and quantity selector
@@ -129,7 +133,7 @@ imo-crafts/
 
 - Secure login via Firebase Authentication
 - **Role-based access** — sidebar and API endpoints filtered by user role
-- **Dashboard** — overview of orders, customers, and inquiries
+- **Dashboard** — role-aware stats: Super Admin sees all metrics + revenue; Staff sees orders/customers; Inventory Manager sees stock levels + low stock alerts + quick actions; Content Manager sees product count + quick actions
 - **Products** — add, edit, delete with Cloudinary image uploads
 - **Orders** — view and update status (Pending → Confirmed → Processing → Delivered)
 - **Customers** — view records and order history
@@ -209,6 +213,12 @@ ADMIN_URL=http://localhost:5174
 EMAIL_USER=your-gmail@gmail.com
 EMAIL_PASS=your-16-digit-app-password
 ADMIN_EMAIL=admin@yourdomain.com
+
+# PayHere Payment Gateway
+# Get sandbox credentials from https://sandbox.payhere.lk
+PAYHERE_MERCHANT_ID=1228172
+PAYHERE_MERCHANT_SECRET=your-merchant-secret
+PAYHERE_SANDBOX=true
 ```
 
 Run the backend:
@@ -335,6 +345,12 @@ Update your EmailJS template (`template_xxxxx`) to use these variables:
 |---|---|---|---|
 | POST | `/api/promotions/validate` | Public | Validate coupon code |
 
+### PayHere
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/api/payhere/hash` | Public | Generate MD5 payment hash (server-side) |
+| POST | `/api/orders/payhere-notify` | Public | PayHere server callback on payment success |
+
 ### Admin Users
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
@@ -369,6 +385,9 @@ Update your EmailJS template (`template_xxxxx`) to use these variables:
 - ✅ **SEO Meta Tags** — `react-helmet-async` SEO component on all pages. Product pages include JSON-LD `Product` + `BreadcrumbList` structured data.
 - ✅ **Role-Based Permissions** — 4 roles (Super Admin, Staff, Inventory Manager, Content Manager) via Firebase custom claims. Sidebar and API routes filtered per role. Admin Users management page.
 - ✅ **Card Payment (PayHere)** — Visa/Mastercard/Amex via PayHere. COD and Card selectable at checkout. Sandbox mode for testing included.
+- ✅ **Guest Access** — Customers can browse, view products, read reviews without logging in. Login required only for Add to Cart, Checkout, Place Order, Custom Order submit, and Write Review. Login page has "Continue as Guest" option.
+- ✅ **Role-Based Dashboard** — Dashboard stats and widgets dynamically filtered by role. Staff sees orders/customers, Inventory Manager sees stock levels + quick actions, Content Manager sees product count + quick actions, Super Admin sees everything including revenue.
+- ✅ **PayHere Hash Security** — MD5 hash generated server-side (`POST /api/payhere/hash`) so merchant secret is never exposed to the client.
 
 ---
 
