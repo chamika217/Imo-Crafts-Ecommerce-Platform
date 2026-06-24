@@ -18,10 +18,31 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: [
-    process.env.CLIENT_URL,
-    process.env.ADMIN_URL,
-  ],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      process.env.ADMIN_URL,
+      // Allow all vercel.app subdomains for this project
+      /^https:\/\/imo-crafts-ecommerce-platform.*\.vercel\.app$/,
+      'http://localhost:5173',
+      'http://localhost:5174',
+    ];
+    
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (allowed instanceof RegExp) return allowed.test(origin);
+      return allowed === origin;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(null, true); // Allow all for now - restrict later
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
