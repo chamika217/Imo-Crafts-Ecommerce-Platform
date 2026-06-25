@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
-import { ExternalLink, Share2, MessageCircle, Banknote, Truck, Sparkles, Clock } from 'lucide-react';
+import { Banknote, Truck, Sparkles, Clock } from 'lucide-react';
+import { FacebookIcon, InstagramIcon, WhatsAppIcon } from '../ui/SocialIcons';
 
 const Footer = () => {
   const openFacebook = () => window.open('https://www.facebook.com/share/1HNaPjeuLq/', '_blank');
 
   const socialLinks = [
-    { icon: ExternalLink, label: 'Facebook', onClick: openFacebook },
-    { icon: Share2, label: 'Instagram', onClick: () => {} },
-    { icon: MessageCircle, label: 'WhatsApp', onClick: () => {} },
+    { icon: FacebookIcon, label: 'Facebook', onClick: openFacebook },
+    { icon: InstagramIcon, label: 'Instagram', onClick: () => {} },
+    { icon: WhatsAppIcon, label: 'WhatsApp', onClick: () => {} },
   ];
 
   const quickLinks = [

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Phone, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
 import SEO from '../../components/SEO';
+import { FacebookIcon } from '../../components/ui/SocialIcons';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', message: '' });
