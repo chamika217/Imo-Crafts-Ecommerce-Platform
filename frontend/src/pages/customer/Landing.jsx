@@ -2,7 +2,6 @@ import { Link, Navigate } from 'react-router-dom';
 import { ArrowRight, Truck, Shield, Sparkles, Star, Gift, PartyPopper, Home as HomeIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import SEO from '../../components/SEO';
-import logo from '../../assets/Logo.png';
 
 const features = [
   { icon: Gift, title: 'Handmade Gifts', desc: 'Unique crafts for every special occasion' },
