@@ -100,7 +100,7 @@ const ProductDetail = () => {
 
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-3">
+        <div className="page-container py-3">
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Link to="/home" className="hover:text-amber-700 transition-colors">Home</Link>
             <span>/</span>
@@ -112,7 +112,7 @@ const ProductDetail = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="page-container py-10">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 mb-8 transition-colors"

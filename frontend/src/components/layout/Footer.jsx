@@ -34,7 +34,7 @@ const Footer = () => {
         ))}
       </div>
 
-      <div className="container py-14">
+      <div className="page-container py-14">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
 
           {/* Brand */}

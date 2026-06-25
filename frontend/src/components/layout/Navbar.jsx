@@ -52,7 +52,7 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E8DDD0] shadow-sm">
-      <div className="container">
+      <div className="page-container">
         <div className="hidden md:grid md:grid-cols-[1fr_auto_1fr] items-center h-[72px] gap-4">
           <Link to="/home" className="flex items-center gap-2.5 group">
             <img
