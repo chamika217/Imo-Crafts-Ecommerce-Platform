@@ -58,14 +58,14 @@ const Shop = () => {
 
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '48px 0' }}>
-        <div className="max-w-3xl mx-auto px-6 text-center">
+        <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Our Products</h1>
           <p className="text-gray-500">Discover our beautiful collection of handmade crafts</p>
         </div>
       </section>
 
       <section className="py-10 bg-gray-50 min-h-[60vh]">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
           {/* Search & Sort */}
           <div className="flex gap-4 mb-6 flex-wrap">

@@ -34,13 +34,13 @@ const Footer = () => {
         ))}
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
 
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="md:col-span-5">
             <h3 className="text-2xl font-bold mb-3" style={{ color: '#E8D5C0' }}>Imo Crafts</h3>
-            <p className="mb-6 leading-relaxed max-w-md text-sm" style={{ color: '#D4C4B0' }}>
+            <p className="mb-6 leading-relaxed max-w-xs text-sm" style={{ color: '#D4C4B0' }}>
               Handmade with love. We create unique, personalized craft items for every special occasion — birthdays, weddings, and more.
             </p>
             <div className="flex gap-3">
@@ -49,17 +49,17 @@ const Footer = () => {
                   key={label}
                   onClick={onClick}
                   aria-label={label}
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-colors border border-white/10 bg-white/[0.08] hover:bg-white/[0.18]"
+                  className="w-9 h-9 rounded-full flex items-center justify-center transition-colors border border-white/10 bg-white/[0.08] hover:bg-white/[0.18]"
                 >
-                  <Icon size={17} />
+                  <Icon size={16} />
                 </button>
               ))}
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider" style={{ color: '#E8D5C0' }}>Quick Links</h4>
+          <div className="md:col-span-3">
+            <h4 className="font-semibold mb-4 text-xs uppercase tracking-wider" style={{ color: '#E8D5C0' }}>Quick Links</h4>
             <div className="flex flex-col gap-2.5">
               {quickLinks.map(({ to, label }) => (
                 <Link key={to} to={to} className="text-sm transition-colors hover:text-[#F5EDE4]" style={{ color: '#C9B8A5' }}>
@@ -70,8 +70,8 @@ const Footer = () => {
           </div>
 
           {/* Info */}
-          <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider" style={{ color: '#E8D5C0' }}>Information</h4>
+          <div className="md:col-span-4">
+            <h4 className="font-semibold mb-4 text-xs uppercase tracking-wider" style={{ color: '#E8D5C0' }}>Information</h4>
             <div className="flex flex-col gap-3">
               {infoItems.map(({ icon: Icon, text }) => (
                 <p key={text} className="text-sm flex items-center gap-2.5" style={{ color: '#C9B8A5' }}>
