@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Phone, MapPin } from 'lucide-react';
+import { Phone, MapPin, MessageCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import SEO from '../../components/SEO';
 import { FacebookIcon } from '../../components/ui/SocialIcons';
@@ -36,7 +36,7 @@ const Contact = () => {
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '64px 0' }}>
         <div style={{ maxWidth: '700px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '8px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: '500', marginBottom: '20px' }}>
-            💬 Get in Touch
+            <MessageCircle size={14} /> Get in Touch
           </div>
           <h1 style={{ fontSize: '42px', fontWeight: '800', color: '#111827', marginBottom: '12px' }}>Contact Us</h1>
           <p style={{ fontSize: '16px', color: '#6B7280', lineHeight: '1.7' }}>
@@ -68,8 +68,8 @@ const Contact = () => {
                   onClick={openFacebook}
                   style={{ display: 'flex', alignItems: 'center', gap: '16px', backgroundColor: 'white', padding: '20px', borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)', cursor: 'pointer' }}
                 >
-                  <div style={{ width: '48px', height: '48px', backgroundColor: '#FFF3E0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '22px' }}>
-                    📘
+                  <div style={{ width: '48px', height: '48px', backgroundColor: '#FFF3E0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#8B4513' }}>
+                    <FacebookIcon size={22} />
                   </div>
                   <div>
                     <div style={{ fontWeight: '600', color: '#1F2937', marginBottom: '4px' }}>Facebook</div>
