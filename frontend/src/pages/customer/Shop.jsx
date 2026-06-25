@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { Search, Gift, PartyPopper, Home, Sparkles, Package } from 'lucide-react';
 import axios from 'axios';
 import ProductCard from '../../components/ui/ProductCard';
 import SEO from '../../components/SEO';
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+const categories = [
+  { id: '', name: 'All Products', icon: Package },
+  { id: 'handmade-gifts', name: 'Handmade Gifts', icon: Gift },
+  { id: 'event-crafts', name: 'Event & Party', icon: PartyPopper },
+  { id: 'home-decor', name: 'Home & Decor', icon: Home },
+  { id: 'custom-orders', name: 'Custom Orders', icon: Sparkles },
+];
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -14,14 +22,6 @@ const Shop = () => {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
   const [sortBy, setSortBy] = useState('latest');
-
-  const categories = [
-    { id: '', name: 'All Products' },
-    { id: 'handmade-gifts', name: '🎁 Handmade Gifts' },
-    { id: 'event-crafts', name: '🎉 Event & Party' },
-    { id: 'home-decor', name: '🏡 Home & Decor' },
-    { id: 'custom-orders', name: '✨ Custom Orders' },
-  ];
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -49,37 +49,37 @@ const Shop = () => {
     });
 
   return (
-    <div style={{ width: '100%', overflowX: 'hidden' }}>
+    <div className="w-full">
       <SEO
         title="Shop — Handmade Crafts & Gifts"
-        description="Browse our full collection of handmade crafts, resin art, personalized gifts and home decor. Shop online and get island-wide delivery."
+        description="Browse our full collection of handmade crafts, resin art, personalized gifts and home decor."
         url="/shop"
       />
 
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '48px 0' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: '800', color: '#111827', marginBottom: '12px' }}>Our Products</h1>
-          <p style={{ fontSize: '16px', color: '#6B7280' }}>Discover our beautiful collection of handmade crafts</p>
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Our Products</h1>
+          <p className="text-gray-500">Discover our beautiful collection of handmade crafts</p>
         </div>
       </section>
 
-      <section style={{ padding: '40px 0', backgroundColor: '#F9FAFB', minHeight: '60vh' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+      <section className="py-10 bg-gray-50 min-h-[60vh]">
+        <div className="max-w-7xl mx-auto px-6">
 
           {/* Search & Sort */}
-          <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
-            <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
-              <Search size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
+          <div className="flex gap-4 mb-6 flex-wrap">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text" placeholder="Search products..."
                 value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ width: '100%', padding: '12px 16px 12px 44px', border: '1.5px solid #E5E7EB', borderRadius: '999px', fontSize: '14px', outline: 'none', backgroundColor: 'white', boxSizing: 'border-box' }}
+                className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-full text-sm outline-none bg-white focus:border-amber-400"
               />
             </div>
             <select
               value={sortBy} onChange={(e) => setSortBy(e.target.value)}
-              style={{ padding: '12px 20px', border: '1.5px solid #E5E7EB', borderRadius: '999px', fontSize: '14px', outline: 'none', backgroundColor: 'white', cursor: 'pointer' }}
+              className="px-5 py-3 border border-gray-200 rounded-full text-sm outline-none bg-white cursor-pointer focus:border-amber-400"
             >
               <option value="latest">Latest</option>
               <option value="price-low">Price: Low to High</option>
@@ -88,38 +88,44 @@ const Shop = () => {
           </div>
 
           {/* Categories */}
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '32px', flexWrap: 'wrap' }}>
-            {categories.map(cat => (
+          <div className="flex gap-2.5 mb-8 flex-wrap">
+            {categories.map(({ id, name, icon: Icon }) => (
               <button
-                key={cat.id} onClick={() => setSelectedCategory(cat.id)}
-                style={{ padding: '10px 20px', borderRadius: '999px', fontSize: '14px', fontWeight: '500', border: 'none', cursor: 'pointer', transition: 'all 0.2s', backgroundColor: selectedCategory === cat.id ? '#8B4513' : 'white', color: selectedCategory === cat.id ? 'white' : '#374151', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
+                key={id}
+                onClick={() => setSelectedCategory(id)}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border transition-all ${
+                  selectedCategory === id
+                    ? 'bg-amber-700 text-white border-amber-700 shadow-sm'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-amber-300'
+                }`}
               >
-                {cat.name}
+                <Icon size={15} />
+                {name}
               </button>
             ))}
           </div>
 
           {/* Products */}
           {loading ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
-                <div key={i} style={{ backgroundColor: '#E5E7EB', borderRadius: '16px', aspectRatio: '1' }} />
+                <div key={i} className="bg-gray-200 rounded-2xl aspect-square animate-pulse" />
               ))}
             </div>
           ) : filteredProducts.length > 0 ? (
             <>
-              <p style={{ color: '#9CA3AF', fontSize: '14px', marginBottom: '20px' }}>{filteredProducts.length} products found</p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+              <p className="text-sm text-gray-400 mb-5">{filteredProducts.length} products found</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {filteredProducts.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             </>
           ) : (
-            <div style={{ textAlign: 'center', padding: '80px 0' }}>
-              <div style={{ fontSize: '64px', marginBottom: '16px' }}>🔍</div>
-              <p style={{ fontSize: '20px', fontWeight: '600', color: '#374151', marginBottom: '8px' }}>No products found</p>
-              <p style={{ color: '#9CA3AF' }}>Try a different search or category</p>
+            <div className="text-center py-20">
+              <Package size={56} className="mx-auto mb-4 text-gray-200" />
+              <p className="text-xl font-semibold text-gray-700 mb-2">No products found</p>
+              <p className="text-gray-400">Try a different search or category</p>
             </div>
           )}
         </div>
@@ -129,6 +135,3 @@ const Shop = () => {
 };
 
 export default Shop;
-// chore: update 71 - 2026-06-10T23:11:42
-
-// chore: update 140 - 2026-06-12T18:26:04

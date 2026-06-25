@@ -6,7 +6,6 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-// Role permission map - what each role can access
 export const ROLE_PERMISSIONS = {
   superAdmin: ['dashboard', 'products', 'orders', 'customers', 'inventory', 'inquiries', 'media', 'promotions', 'reviews', 'reports', 'users'],
   staff: ['dashboard', 'orders', 'customers', 'inquiries'],
@@ -22,9 +21,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Get role from custom claims
         const tokenResult = await firebaseUser.getIdTokenResult(true);
-        const role = tokenResult.claims.role || 'superAdmin'; // fallback for existing admin
+        const role = tokenResult.claims.role || 'superAdmin';
         setUser(firebaseUser);
         setUserRole(role);
       } else {
@@ -45,8 +43,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    setUser(null);
     setUserRole(null);
-    return await signOut(auth);
+    await signOut(auth);
+    // Clear browser history so back button cannot go back to admin pages
+    window.history.pushState(null, '', '/admin/login');
+    window.location.replace('/admin/login');
   };
 
   const hasPermission = (page) => {
@@ -57,15 +59,7 @@ export const AuthProvider = ({ children }) => {
 
   const isSuperAdmin = () => userRole === 'superAdmin';
 
-  const value = {
-    user,
-    userRole,
-    loading,
-    login,
-    logout,
-    hasPermission,
-    isSuperAdmin,
-  };
+  const value = { user, userRole, loading, login, logout, hasPermission, isSuperAdmin };
 
   return (
     <AuthContext.Provider value={value}>

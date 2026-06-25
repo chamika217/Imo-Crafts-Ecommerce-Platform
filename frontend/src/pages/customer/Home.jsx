@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Truck, Shield, Phone, Star } from 'lucide-react';
+import { ArrowRight, Truck, Shield, Phone, Star, Gift, PartyPopper, Home as HomeIcon, Sparkles } from 'lucide-react';
 import axios from 'axios';
 import { db } from '../../firebase/config';
 import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
@@ -99,10 +99,10 @@ const Home = () => {
   }, []);
 
   const categories = [
-    { name: 'Handmade Gifts', emoji: '🎁', id: 'handmade-gifts' },
-    { name: 'Event & Party', emoji: '🎉', id: 'event-crafts' },
-    { name: 'Home Decor', emoji: '🏡', id: 'home-decor' },
-    { name: 'Custom Orders', emoji: '✨', id: 'custom-orders' },
+    { name: 'Handmade Gifts', icon: Gift, id: 'handmade-gifts' },
+    { name: 'Event & Party', icon: PartyPopper, id: 'event-crafts' },
+    { name: 'Home Decor', icon: HomeIcon, id: 'home-decor' },
+    { name: 'Custom Orders', icon: Sparkles, id: 'custom-orders' },
   ];
 
   return (
@@ -121,7 +121,7 @@ const Home = () => {
             {/* Left - Text */}
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '8px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: '500', marginBottom: '24px' }}>
-                <span>🎨</span> Handcrafted with Love in Sri Lanka
+                <Sparkles size={14} /> Handcrafted with Love in Sri Lanka
               </div>
               <h1 style={{ fontSize: '56px', fontWeight: '800', color: '#111827', lineHeight: '1.2', marginBottom: '24px' }}>
                 Unique Handmade<br />
@@ -239,7 +239,9 @@ const Home = () => {
             {categories.map((cat, i) => (
               <Link key={i} to={`/shop?category=${cat.id}`} style={{ textDecoration: 'none' }}>
                 <div style={{ backgroundColor: 'white', borderRadius: '16px', padding: '24px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6', transition: 'all 0.2s', cursor: 'pointer' }}>
-                  <div style={{ fontSize: '48px', marginBottom: '12px' }}>{cat.emoji}</div>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#FFF3E0', color: '#8B4513', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                    <cat.icon size={24} />
+                  </div>
                   <div style={{ fontWeight: '600', color: '#1F2937', fontSize: '14px' }}>{cat.name}</div>
                 </div>
               </Link>
@@ -275,7 +277,7 @@ const Home = () => {
             </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '80px 0', backgroundColor: '#F9FAFB', borderRadius: '24px' }}>
-              <div style={{ fontSize: '64px', marginBottom: '16px' }}>🎨</div>
+              <Sparkles size={48} style={{ margin: '0 auto 16px', color: '#D1D5DB' }} />
               <p style={{ fontSize: '20px', fontWeight: '600', color: '#374151', marginBottom: '8px' }}>Products Coming Soon!</p>
               <p style={{ color: '#9CA3AF', marginBottom: '24px' }}>We're adding our beautiful handmade items</p>
               <Link to="/custom-order" style={{ backgroundColor: '#8B4513', color: 'white', padding: '12px 32px', borderRadius: '999px', fontWeight: '500', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
@@ -294,12 +296,14 @@ const Home = () => {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
             {[
-              { emoji: '💝', title: 'Made with Love', desc: 'Every piece is handcrafted with care, passion, and attention to detail.' },
-              { emoji: '⭐', title: 'Premium Quality', desc: 'We use high quality materials to ensure lasting beauty and durability.' },
-              { emoji: '🎯', title: 'Fully Personalized', desc: 'Custom designs tailored specifically to your needs and preferences.' },
+              { icon: <Truck size={28} />, title: 'Made with Love', desc: 'Every piece is handcrafted with care, passion, and attention to detail.' },
+              { icon: <Star size={28} />, title: 'Premium Quality', desc: 'We use high quality materials to ensure lasting beauty and durability.' },
+              { icon: <Sparkles size={28} />, title: 'Fully Personalized', desc: 'Custom designs tailored specifically to your needs and preferences.' },
             ].map((item, i) => (
               <div key={i} style={{ backgroundColor: 'white', borderRadius: '20px', padding: '32px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6' }}>
-                <div style={{ fontSize: '48px', marginBottom: '16px' }}>{item.emoji}</div>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', backgroundColor: '#FFF3E0', color: '#8B4513', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                  {item.icon}
+                </div>
                 <h3 style={{ fontWeight: '700', color: '#1F2937', fontSize: '18px', marginBottom: '8px' }}>{item.title}</h3>
                 <p style={{ color: '#9CA3AF', fontSize: '14px', lineHeight: '1.6' }}>{item.desc}</p>
               </div>

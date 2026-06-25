@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, Package } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -48,7 +48,7 @@ const Cart = () => {
                 {item.images?.[0] ? (
                   <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-2xl">🎨</div>
+                  <div className="w-full h-full flex items-center justify-center"><Package size={24} className="text-gray-300" /></div>
                 )}
               </div>
 
