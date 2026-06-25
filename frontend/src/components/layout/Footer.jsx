@@ -34,7 +34,7 @@ const Footer = () => {
         ))}
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-14">
+      <div className="w-full max-w-[1400px] mx-auto px-8 lg:px-16 py-14">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
 
           {/* Brand */}
