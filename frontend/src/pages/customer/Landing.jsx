@@ -1,7 +1,8 @@
 import { Link, Navigate } from 'react-router-dom';
-import { ArrowRight, Truck, Shield, Sparkles, Star, Gift } from 'lucide-react';
+import { ArrowRight, Truck, Shield, Sparkles, Star, Gift, PartyPopper, Home as HomeIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import SEO from '../../components/SEO';
+import logo from '../../assets/Logo.png';
 
 const features = [
   { icon: Gift, title: 'Handmade Gifts', desc: 'Unique crafts for every special occasion' },
@@ -11,10 +12,10 @@ const features = [
 ];
 
 const categories = [
-  { emoji: '🎁', name: 'Handmade Gifts' },
-  { emoji: '🎉', name: 'Event & Party' },
-  { emoji: '🏡', name: 'Home Decor' },
-  { emoji: '✨', name: 'Custom Orders' },
+  { icon: Gift, name: 'Handmade Gifts' },
+  { icon: PartyPopper, name: 'Event & Party' },
+  { icon: HomeIcon, name: 'Home Decor' },
+  { icon: Sparkles, name: 'Custom Orders' },
 ];
 
 const Landing = () => {
@@ -44,10 +45,10 @@ const Landing = () => {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
             <span
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-lg"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-white"
               style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}
             >
-              🎨
+              <Gift size={18} />
             </span>
             <span className="text-xl font-bold text-[#8B4513]">Imo Crafts</span>
           </Link>
@@ -77,7 +78,7 @@ const Landing = () => {
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto text-center">
             <span className="inline-flex items-center gap-2 bg-[#FEF3C7] text-[#92400E] px-4 py-2 rounded-full text-sm font-medium mb-6">
-              🎨 Handcrafted with Love in Sri Lanka
+              <Sparkles size={14} /> Handcrafted with Love in Sri Lanka
             </span>
             <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
               Unique Handmade
@@ -127,13 +128,12 @@ const Landing = () => {
             <p className="text-gray-400">Handmade items for every occasion</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
-            {categories.map((cat) => (
-              <div
-                key={cat.name}
-                className="bg-white rounded-2xl p-6 md:p-8 text-center border border-[#E8DDD0] shadow-sm"
-              >
-                <div className="text-5xl mb-3">{cat.emoji}</div>
-                <p className="font-semibold text-gray-800 text-sm">{cat.name}</p>
+            {categories.map(({ icon: Icon, name }) => (
+              <div key={name} className="bg-white rounded-2xl p-6 md:p-8 text-center border border-[#E8DDD0] shadow-sm">
+                <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[#FFF3E0] text-[#8B4513] flex items-center justify-center">
+                  <Icon size={22} />
+                </div>
+                <p className="font-semibold text-gray-800 text-sm">{name}</p>
               </div>
             ))}
           </div>
@@ -204,7 +204,9 @@ const Landing = () => {
       <footer className="py-8 border-t border-[#E8DDD0] bg-white">
         <div className="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-lg">🎨</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white" style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}>
+              <Gift size={16} />
+            </div>
             <span className="font-bold text-[#8B4513]">Imo Crafts</span>
           </div>
           <p className="text-gray-400 text-sm">© 2026 Imo Crafts. All rights reserved.</p>

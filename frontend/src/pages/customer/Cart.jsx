@@ -20,14 +20,11 @@ const Cart = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="page-container py-16 text-center">
-        <ShoppingBag size={64} className="text-gray-200 mx-auto mb-4" />
+      <div className="min-h-[60vh] flex flex-col items-center justify-center py-16 text-center page-container">
+        <ShoppingBag size={64} className="text-gray-200 mb-6" />
         <h2 className="text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
         <p className="text-gray-500 mb-8">Add some products to get started!</p>
-        <Link
-          to="/shop"
-          className="bg-amber-700 text-white px-8 py-3 rounded-full font-medium hover:bg-amber-800 transition-colors"
-        >
+        <Link to="/shop" className="inline-flex items-center gap-2 bg-amber-700 text-white px-8 py-3 rounded-full font-medium hover:bg-amber-800 transition-colors">
           Continue Shopping
         </Link>
       </div>
