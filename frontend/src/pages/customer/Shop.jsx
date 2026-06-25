@@ -67,18 +67,18 @@ const Shop = () => {
         <div className="page-container">
 
           {/* Search & Sort */}
-          <div className="flex gap-4 mb-6 flex-wrap">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+          <div className="flex gap-3 mb-5 flex-wrap items-center">
+            <div className="relative flex-1 min-w-[180px] max-w-xl">
+              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text" placeholder="Search products..."
                 value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-full text-sm outline-none bg-white focus:border-amber-400"
+                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-full text-sm outline-none bg-white focus:border-amber-400"
               />
             </div>
             <select
               value={sortBy} onChange={(e) => setSortBy(e.target.value)}
-              className="px-5 py-3 border border-gray-200 rounded-full text-sm outline-none bg-white cursor-pointer focus:border-amber-400"
+              className="px-4 py-2.5 border border-gray-200 rounded-full text-sm outline-none bg-white cursor-pointer focus:border-amber-400"
             >
               <option value="latest">Latest</option>
               <option value="price-low">Price: Low to High</option>
@@ -87,18 +87,18 @@ const Shop = () => {
           </div>
 
           {/* Categories */}
-          <div className="flex gap-2.5 mb-8 flex-wrap">
+          <div className="flex gap-2 mb-7 flex-wrap">
             {categories.map(({ id, name, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => setSelectedCategory(id)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border transition-all ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
                   selectedCategory === id
                     ? 'bg-amber-700 text-white border-amber-700 shadow-sm'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-amber-300'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-amber-300 hover:text-amber-700'
                 }`}
               >
-                <Icon size={15} />
+                <Icon size={14} />
                 {name}
               </button>
             ))}
