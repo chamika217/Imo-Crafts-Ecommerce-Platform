@@ -56,18 +56,18 @@ const Shop = () => {
         url="/shop"
       />
 
-      <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '48px 0' }}>
+      <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '36px 0' }}>
         <div className="page-container text-center">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Our Products</h1>
-          <p className="text-gray-500">Discover our beautiful collection of handmade crafts</p>
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-2">Our Products</h1>
+          <p className="text-gray-500 text-sm">Discover our beautiful collection of handmade crafts</p>
         </div>
       </section>
 
-      <section className="py-10 bg-gray-50 min-h-[60vh]">
+      <section className="py-8 bg-gray-50 min-h-[60vh]">
         <div className="page-container">
 
           {/* Search & Sort */}
-          <div className="flex gap-3 mb-5 flex-wrap items-center">
+          <div className="flex gap-3 mb-4 flex-wrap items-center">
             <div className="relative flex-1 min-w-[180px] max-w-xl">
               <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
