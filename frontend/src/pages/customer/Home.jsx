@@ -116,14 +116,14 @@ const Home = () => {
       {/* Hero Section */}
       <section style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 50%, #FFE0B2 100%)', width: '100%', padding: '80px 0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '48px', alignItems: 'center' }}>
+          <div className="grid-hero">
 
             {/* Left - Text */}
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '8px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: '500', marginBottom: '24px' }}>
                 <Sparkles size={14} /> Handcrafted with Love in Sri Lanka
               </div>
-              <h1 style={{ fontSize: '56px', fontWeight: '800', color: '#111827', lineHeight: '1.2', marginBottom: '24px' }}>
+              <h1 className="hero-title" style={{ marginBottom: '24px' }}>
                 Unique Handmade<br />
                 <span style={{ color: '#8B4513' }}>Crafts & Gifts</span>
               </h1>
@@ -208,7 +208,7 @@ const Home = () => {
       {/* Features Bar */}
       <section style={{ borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6', backgroundColor: 'white', padding: '24px 0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+          <div className="grid-3-col">
             {[
               { icon: <Truck size={22} />, title: 'Island-wide Delivery', desc: 'We deliver across Sri Lanka' },
               { icon: <Shield size={22} />, title: 'Cash on Delivery', desc: 'Pay safely when you receive' },
@@ -235,7 +235,7 @@ const Home = () => {
             <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1F2937', marginBottom: '8px' }}>Shop by Category</h2>
             <p style={{ color: '#9CA3AF' }}>Find the perfect handmade item for every occasion</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+          <div className="grid-4-col">
             {categories.map((cat, i) => (
               <Link key={i} to={`/shop?category=${cat.id}`} style={{ textDecoration: 'none' }}>
                 <div style={{ backgroundColor: 'white', borderRadius: '16px', padding: '24px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6', transition: 'all 0.2s', cursor: 'pointer' }}>
@@ -264,13 +264,13 @@ const Home = () => {
           </div>
 
           {loading ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+            <div className="grid-4-col">
               {[...Array(8)].map((_, i) => (
-                <div key={i} style={{ backgroundColor: '#F3F4F6', borderRadius: '16px', aspectRatio: '1', animation: 'pulse 2s infinite' }} />
+                <div key={i} style={{ backgroundColor: '#F3F4F6', borderRadius: '16px', aspectRatio: '1' }} />
               ))}
             </div>
           ) : featuredProducts.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+            <div className="grid-4-col">
               {featuredProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -294,7 +294,7 @@ const Home = () => {
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
             <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1F2937' }}>Why Choose Imo Crafts?</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
+          <div className="grid-3-col">
             {[
               { icon: <Truck size={28} />, title: 'Made with Love', desc: 'Every piece is handcrafted with care, passion, and attention to detail.' },
               { icon: <Star size={28} />, title: 'Premium Quality', desc: 'We use high quality materials to ensure lasting beauty and durability.' },

@@ -29,7 +29,7 @@ const About = () => {
       {/* Story */}
       <section style={{ padding: '80px 0', backgroundColor: 'white' }}>
         <div className="page-container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center' }}>
+          <div className="grid-2-col" style={{ gap: '64px', alignItems: 'center' }}>
             <div>
               <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#1F2937', marginBottom: '24px' }}>Our Story</h2>
               <p style={{ color: '#6B7280', lineHeight: '1.8', marginBottom: '16px' }}>
@@ -57,7 +57,7 @@ const About = () => {
       {/* Stats */}
       <section style={{ padding: '64px 0', background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}>
         <div className="page-container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '32px', textAlign: 'center' }}>
+          <div className="grid-stats-4">
             {[
               { value: '500+', label: 'Happy Customers' },
               { value: '1000+', label: 'Orders Completed' },

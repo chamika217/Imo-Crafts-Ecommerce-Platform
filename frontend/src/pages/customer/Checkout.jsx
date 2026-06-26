@@ -250,15 +250,15 @@ const Checkout = () => {
       </section>
 
       <section style={{ padding: '40px 0', backgroundColor: '#F9FAFB' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 0.7fr', gap: '32px' }}>
+        <div className="page-container">
+          <div className="grid-checkout">
 
             {/* Form */}
             <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '40px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #F3F4F6' }}>
               <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1F2937', marginBottom: '28px' }}>Delivery Information</h2>
 
               <form onSubmit={handleSubmit}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                <div className="grid-form-2" style={{ marginBottom: '16px' }}>
                   <div>
                     <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Full Name *</label>
                     <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Your full name" style={inputStyle} />
@@ -330,7 +330,7 @@ const Checkout = () => {
                 {/* Payment Method */}
                 <div style={{ marginBottom: '24px' }}>
                   <h3 style={{ fontWeight: '600', color: '#1F2937', marginBottom: '14px', fontSize: '15px' }}>Payment Method</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="grid-form-2" style={{ gap: '12px' }}>
 
                     {/* COD Option */}
                     <button
