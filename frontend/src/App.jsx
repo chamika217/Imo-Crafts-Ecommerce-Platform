@@ -33,6 +33,7 @@ import Reports from './pages/admin/Reports';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import AdminSidebar from './components/layout/AdminSidebar';
+import ScrollToTop from './components/ScrollToTop';
 
 const CustomerLayout = ({ children }) => (
   <>
@@ -57,6 +58,7 @@ function App() {
       <CartProvider>
         <Router>
           <Toaster position="top-right" />
+          <ScrollToTop />
           <Routes>
             {/* Landing → directly to home/shop */}
             <Route path="/" element={<Navigate to="/home" replace />} />

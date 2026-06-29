@@ -315,6 +315,53 @@ const Home = () => {
       {/* Testimonials Section */}
       <TestimonialsSection />
 
+      {/* Promotional Banner */}
+      <section style={{ padding: '48px 0', backgroundColor: 'white' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+
+            {/* Banner 1 - Custom Orders */}
+            <div style={{ background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 100%)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', minHeight: '180px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '160px', height: '160px', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '50%' }} />
+              <div style={{ position: 'absolute', bottom: '-40px', right: '40px', width: '120px', height: '120px', backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: '50%' }} />
+              <div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(255,255,255,0.15)', color: 'white', padding: '4px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: '500', marginBottom: '12px' }}>
+                  <Sparkles size={12} /> Special Order
+                </div>
+                <h3 style={{ color: 'white', fontSize: '22px', fontWeight: '700', lineHeight: '1.3', marginBottom: '8px' }}>
+                  Custom Crafts<br />Just for You
+                </h3>
+                <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px', lineHeight: '1.6' }}>
+                  Tell us your vision, we'll create it
+                </p>
+              </div>
+              <Link to="/custom-order" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'white', color: '#8B4513', padding: '10px 20px', borderRadius: '999px', fontWeight: '600', fontSize: '13px', textDecoration: 'none', alignSelf: 'flex-start', marginTop: '16px' }}>
+                Order Now <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            {/* Banner 2 - Free delivery */}
+            <div style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFE0B2 100%)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', minHeight: '180px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #FFD5A0' }}>
+              <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '140px', height: '140px', backgroundColor: 'rgba(139,69,19,0.05)', borderRadius: '50%' }} />
+              <div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '4px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: '500', marginBottom: '12px' }}>
+                  <Truck size={12} /> Delivery
+                </div>
+                <h3 style={{ color: '#1F2937', fontSize: '22px', fontWeight: '700', lineHeight: '1.3', marginBottom: '8px' }}>
+                  Island-wide<br />Delivery
+                </h3>
+                <p style={{ color: '#6B7280', fontSize: '13px', lineHeight: '1.6' }}>
+                  Cash on delivery — pay when you receive
+                </p>
+              </div>
+              <Link to="/shop" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #8B4513, #A0522D)', color: 'white', padding: '10px 20px', borderRadius: '999px', fontWeight: '600', fontSize: '13px', textDecoration: 'none', alignSelf: 'flex-start', marginTop: '16px' }}>
+                Shop Now <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section style={{ padding: '80px 0', background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
