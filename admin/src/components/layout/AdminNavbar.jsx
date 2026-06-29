@@ -160,11 +160,11 @@ const AdminNavbar = () => {
         <div className="relative" ref={panelRef}>
           <button
             onClick={() => setOpen(!open)}
-            className="relative text-gray-500 hover:text-gray-700 transition-colors p-1"
+            className="relative text-gray-500 hover:text-gray-700 transition-colors p-1.5 rounded-xl hover:bg-gray-100"
           >
-            <Bell size={20} />
+            <Bell size={22} />
             {notifications.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute top-0 right-0 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 border-2 border-white">
                 {notifications.length > 9 ? '9+' : notifications.length}
               </span>
             )}
