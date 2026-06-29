@@ -46,8 +46,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setUserRole(null);
     await signOut(auth);
-    // Clear browser history so back button cannot go back to admin pages
-    window.history.pushState(null, '', '/admin/login');
+    // Replace entire history stack so back button cannot return to admin
+    window.history.go(-(window.history.length - 1));
     window.location.replace('/admin/login');
   };
 

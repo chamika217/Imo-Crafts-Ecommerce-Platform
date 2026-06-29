@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -30,6 +31,19 @@ const AdminLayout = () => (
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
+
+  // Push a dummy state so back button hits it before leaving admin
+  useEffect(() => {
+    if (user) {
+      window.history.pushState(null, '', window.location.href);
+      const handlePop = () => {
+        window.history.pushState(null, '', window.location.href);
+      };
+      window.addEventListener('popstate', handlePop);
+      return () => window.removeEventListener('popstate', handlePop);
+    }
+  }, [user]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50 text-gray-500">
@@ -41,6 +55,16 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Redirect logged-in users away from login page
+const GuestRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 text-gray-500">Loading...</div>
+  );
+  if (user) return <Navigate to="/admin" replace />;
+  return children;
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -49,7 +73,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/admin/login" replace />} />
           <Route path="/login" element={<Navigate to="/admin/login" replace />} />
-          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/login" element={<GuestRoute><Login /></GuestRoute>} />
 
           <Route
             path="/admin"
