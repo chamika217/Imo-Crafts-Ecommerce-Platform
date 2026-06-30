@@ -21,10 +21,10 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Link to={`/shop/${product.id}`} className="group">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+    <Link to={`/shop/${product.id}`} className="group h-full">
+      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 h-full flex flex-col">
         {/* Image */}
-        <div className="relative overflow-hidden aspect-square bg-gray-50">
+        <div className="relative overflow-hidden aspect-square bg-gray-50 flex-shrink-0">
           {product.images?.[0] ? (
             <img
               src={product.images[0]}
@@ -33,12 +33,12 @@ const ProductCard = ({ product }) => {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-gray-300">
-              <span className="text-4xl">🎨</span>
+              <Package size={40} className="text-gray-200" />
             </div>
           )}
           {product.status === 'out_of_stock' && (
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <span className="text-white font-semibold">Out of Stock</span>
+              <span className="text-white font-semibold text-sm">Out of Stock</span>
             </div>
           )}
           {product.featured && (
@@ -48,26 +48,29 @@ const ProductCard = ({ product }) => {
           )}
         </div>
 
-        {/* Info */}
-        <div className="p-4">
-          <h3 className="font-medium text-gray-800 text-sm mb-1 line-clamp-2">
+        {/* Info - flex-col so price stays at bottom */}
+        <div className="p-4 flex flex-col flex-1">
+          <h3 className="font-medium text-gray-800 text-sm mb-2 line-clamp-2 flex-1">
             {product.name}
           </h3>
-          <div className="flex items-center justify-between mt-2">
-            <span className="font-bold text-amber-800">
-              Rs. {product.price?.toLocaleString()}
-            </span>
-            <button
-              onClick={handleAddToCart}
-              disabled={product.status === 'out_of_stock'}
-              className="p-2 bg-amber-700 text-white rounded-full hover:bg-amber-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ShoppingCart size={16} />
-            </button>
+          {/* Price + Cart always at bottom */}
+          <div className="mt-auto">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-amber-800 text-sm">
+                Rs. {product.price?.toLocaleString()}
+              </span>
+              <button
+                onClick={handleAddToCart}
+                disabled={product.status === 'out_of_stock'}
+                className="p-2 bg-amber-700 text-white rounded-full hover:bg-amber-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ShoppingCart size={15} />
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mt-1.5 capitalize">
+              {product.status?.replace('_', ' ')}
+            </p>
           </div>
-          <p className="text-xs text-gray-400 mt-1 capitalize">
-            {product.status?.replace('_', ' ')}
-          </p>
         </div>
       </div>
     </Link>
