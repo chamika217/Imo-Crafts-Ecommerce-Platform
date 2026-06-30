@@ -87,6 +87,7 @@ body {
 @media (min-width: 1024px) {
   .grid-4-col {
     grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
   }
 }
 

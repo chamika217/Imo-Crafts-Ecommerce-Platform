@@ -114,7 +114,7 @@ const Shop = () => {
           ) : filteredProducts.length > 0 ? (
             <>
               <p className="text-sm text-gray-400 mb-5">{filteredProducts.length} products found</p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-stretch">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 items-stretch">
                 {filteredProducts.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}

@@ -270,7 +270,7 @@ const Home = () => {
               ))}
             </div>
           ) : featuredProducts.length > 0 ? (
-            <div className="grid-4-col items-stretch">
+            <div className="grid-4-col items-stretch" style={{ gap: '16px' }}>
               {featuredProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
