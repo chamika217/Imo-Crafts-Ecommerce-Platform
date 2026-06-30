@@ -38,6 +38,15 @@ const Cart = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-gray-400">{cartItems.length} item{cartItems.length > 1 ? 's' : ''}</span>
+            <button
+              onClick={() => { if (window.confirm('Remove all items from cart?')) clearCart(); }}
+              className="text-red-400 hover:text-red-600 text-xs flex items-center gap-1 transition-colors"
+            >
+              <Trash2 size={13} /> Clear Cart
+            </button>
+          </div>
           {cartItems.map(item => (
             <div key={item.id} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex gap-4">
               {/* Image */}
@@ -87,12 +96,7 @@ const Cart = () => {
             </div>
           ))}
 
-          <button
-            onClick={clearCart}
-            className="text-red-400 hover:text-red-600 text-sm flex items-center gap-1"
-          >
-            <Trash2 size={14} /> Clear Cart
-          </button>
+          {/* Clear Cart - removed from bottom, moved to top */}
         </div>
 
         {/* Order Summary */}
