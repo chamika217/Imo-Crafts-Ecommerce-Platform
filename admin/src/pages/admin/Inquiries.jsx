@@ -75,7 +75,7 @@ const Inquiries = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Event Date</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Budget</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Submitted</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Action</th>
                 </tr>
               </thead>
@@ -93,8 +93,8 @@ const Inquiries = () => {
                         {inquiry.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
-                      {new Date(inquiry.createdAt).toLocaleDateString()}
+                    <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                      {new Date(inquiry.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </td>
                     <td className="px-6 py-4">
                       <button
