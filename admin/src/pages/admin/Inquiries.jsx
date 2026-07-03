@@ -137,36 +137,49 @@ const InquiryModal = ({ inquiry, onClose, onUpdate, statusColors }) => {
         <h3 className="text-lg font-bold text-gray-800 mb-4">Inquiry Details</h3>
 
         <div className="space-y-3 mb-6">
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div>
-              <p className="text-gray-400">Customer</p>
-              <p className="font-medium">{inquiry.customerInfo?.name}</p>
+          {/* Customer Info - proper grid with spacing */}
+          <div className="bg-gray-50 rounded-xl p-4 grid grid-cols-2 gap-4 text-sm">
+            <div className="space-y-0.5">
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Customer</p>
+              <p className="font-semibold text-gray-800">{inquiry.customerInfo?.name || '-'}</p>
             </div>
-            <div>
-              <p className="text-gray-400">Phone</p>
-              <p className="font-medium">{inquiry.customerInfo?.phone}</p>
+            <div className="space-y-0.5">
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Status</p>
+              <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${statusColors[inquiry.status] || 'bg-gray-100 text-gray-600'}`}>
+                {inquiry.status}
+              </span>
             </div>
-            <div>
-              <p className="text-gray-400">Email</p>
-              <p className="font-medium">{inquiry.customerInfo?.email || '-'}</p>
+            {/* Phone - full row */}
+            <div className="col-span-2 pt-2 border-t border-gray-200 space-y-0.5">
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Phone</p>
+              <p className="font-medium text-gray-800">{inquiry.customerInfo?.phone || '-'}</p>
             </div>
-            <div>
-              <p className="text-gray-400">Event Date</p>
-              <p className="font-medium">{inquiry.eventDate || '-'}</p>
+            {/* Email - full row */}
+            <div className="col-span-2 space-y-0.5">
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Email</p>
+              <p className="font-medium text-gray-800 break-all">{inquiry.customerInfo?.email || '-'}</p>
             </div>
-            <div>
-              <p className="text-gray-400">Budget</p>
-              <p className="font-medium">{inquiry.budget || '-'}</p>
+            <div className="space-y-0.5">
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Event Date</p>
+              <p className="font-medium text-gray-800">{inquiry.eventDate || '-'}</p>
             </div>
-            <div>
-              <p className="text-gray-400">Quantity</p>
-              <p className="font-medium">{inquiry.quantity || '-'}</p>
+            <div className="space-y-0.5">
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Budget</p>
+              <p className="font-medium text-gray-800">{inquiry.budget ? `Rs. ${inquiry.budget}` : '-'}</p>
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Quantity</p>
+              <p className="font-medium text-gray-800">{inquiry.quantity || '-'}</p>
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Submitted</p>
+              <p className="font-medium text-gray-800">{new Date(inquiry.createdAt).toLocaleDateString()}</p>
             </div>
           </div>
 
           <div>
-            <p className="text-gray-400 text-sm">Description</p>
-            <p className="text-sm mt-1 bg-gray-50 p-3 rounded-xl">{inquiry.description}</p>
+            <p className="text-xs text-gray-400 uppercase tracking-wide font-medium mb-2">Description</p>
+            <p className="text-sm bg-gray-50 p-3 rounded-xl leading-relaxed text-gray-700">{inquiry.description}</p>
           </div>
         </div>
 
