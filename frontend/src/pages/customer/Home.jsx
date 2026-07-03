@@ -121,21 +121,22 @@ const Home = () => {
           <div className="grid-hero">
 
             {/* Left - Text */}
-            <div>
+            <div className="animate-fade-in-up">
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '8px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: '500', marginBottom: '24px' }}>
                 <Sparkles size={14} /> Handcrafted with Love in Sri Lanka
               </div>
-              <h1 className="hero-title" style={{ marginBottom: '24px' }}>
+              <h1 className="hero-title animate-fade-in-up-delay1" style={{ marginBottom: '24px' }}>
                 Unique Handmade<br />
                 <span style={{ color: '#8B4513' }}>Crafts & Gifts</span>
               </h1>
-              <p style={{ fontSize: '18px', color: '#6B7280', maxWidth: '520px', marginBottom: '40px', lineHeight: '1.7' }}>
+              <p className="animate-fade-in-up-delay2" style={{ fontSize: '18px', color: '#6B7280', maxWidth: '520px', marginBottom: '40px', lineHeight: '1.7' }}>
                 Discover beautifully crafted handmade items, personalized gifts, and custom
                 decorations for every special occasion. Made with love, delivered island-wide.
               </p>
-              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '48px' }}>
+              <div className="animate-fade-in-up-delay3" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '48px' }}>
                 <Link
                   to="/shop"
+                  className="hover-lift"
                   style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)', color: 'white', padding: '14px 36px', borderRadius: '999px', fontWeight: '600', fontSize: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', boxShadow: '0 4px 15px rgba(139,69,19,0.3)' }}
                 >
                   Shop Now <ArrowRight size={18} />
@@ -149,7 +150,7 @@ const Home = () => {
               </div>
 
               {/* Stats */}
-              <div style={{ display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
+              <div className="animate-fade-in-up-delay4" style={{ display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
                 {[
                   { value: '500+', label: 'Happy Customers' },
                   { value: '1000+', label: 'Orders Delivered' },
@@ -164,7 +165,7 @@ const Home = () => {
             </div>
 
             {/* Right - Image Carousel */}
-            <div style={{ position: 'relative' }}>
+            <div className="animate-scale-in animate-float" style={{ position: 'relative' }}>
               <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '100%', height: '100%', background: 'linear-gradient(135deg, #D4A574, #8B4513)', borderRadius: '32px', opacity: 0.15, zIndex: 0 }} />
               <div style={{ position: 'relative', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(139,69,19,0.2)', aspectRatio: '4/5', backgroundColor: 'white' }}>
                 {heroImages.map((img, i) => (
