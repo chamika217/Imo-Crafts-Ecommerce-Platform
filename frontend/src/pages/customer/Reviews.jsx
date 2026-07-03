@@ -22,15 +22,18 @@ import SEO from '../../components/SEO';const Reviews = () => {
 
   const fetchReviews = async () => {
     try {
+      // Use simple where query only - client-side sort to avoid composite index requirement
       const q = query(
         collection(db, 'reviews'),
-        where('approved', '==', true),
-        orderBy('createdAt', 'desc')
+        where('approved', '==', true)
       );
       const snapshot = await getDocs(q);
-      setReviews(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const data = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setReviews(data);
     } catch (error) {
-      console.error(error);
+      console.error('Reviews fetch error:', error);
     } finally {
       setLoading(false);
     }

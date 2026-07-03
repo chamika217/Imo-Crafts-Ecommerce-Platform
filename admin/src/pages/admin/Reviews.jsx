@@ -12,9 +12,11 @@ const Reviews = () => {
 
   const fetchReviews = async () => {
     try {
-      const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
-      setReviews(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+      const snapshot = await getDocs(collection(db, 'reviews'));
+      const data = snapshot.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setReviews(data);
     } catch (error) {
       toast.error('Failed to load reviews');
     } finally {

@@ -21,13 +21,15 @@ const TestimonialsSection = () => {
       try {
         const q = query(
           collection(db, 'reviews'),
-          where('approved', '==', true),
-          orderBy('createdAt', 'desc'),
-          limit(3)
+          where('approved', '==', true)
         );
         const snap = await getDocs(q);
-        setReviews(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      } catch (e) { /* silent */ }
+        const data = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 3);
+        setReviews(data);
+      } catch (e) { console.error('Testimonials fetch:', e); }
     };
     fetch();
   }, []);
