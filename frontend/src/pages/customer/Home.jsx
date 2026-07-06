@@ -37,33 +37,48 @@ const TestimonialsSection = () => {
   if (reviews.length === 0) return null;
 
   return (
-    <section style={{ padding: '64px 0', backgroundColor: 'white' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
+    <section className="animate-fade-in" style={{ padding: '64px 0', backgroundColor: 'white' }}>
+      <div className="page-container">
+        <div className="reviews-section-header">
           <div>
             <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1F2937', marginBottom: '4px' }}>What Customers Say</h2>
-            <p style={{ color: '#9CA3AF' }}>Real reviews from our happy customers</p>
+            <p style={{ color: '#9CA3AF', margin: 0 }}>Real reviews from our happy customers</p>
           </div>
-          <Link to="/reviews" style={{ color: '#8B4513', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500', textDecoration: 'none' }}>
+          <Link
+            to="/reviews"
+            className="hover-lift"
+            style={{ color: '#8B4513', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: '500', textDecoration: 'none', alignSelf: 'flex-start' }}
+          >
             All Reviews <ArrowRight size={16} />
           </Link>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-          {reviews.map(review => (
-            <div key={review.id} style={{ backgroundColor: '#FFFBF7', borderRadius: '20px', padding: '28px', border: '1px solid #F3E8DC' }}>
-              <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
-                {[1,2,3,4,5].map(s => (
-                  <Star key={s} size={16} fill={s <= review.rating ? '#F59E0B' : 'none'} stroke={s <= review.rating ? '#F59E0B' : '#E5E7EB'} strokeWidth={1.5} />
+        <div className="reviews-grid-home">
+          {reviews.map((review) => (
+            <div key={review.id} className="review-card" style={{ backgroundColor: '#FFFBF7', border: '1px solid #F3E8DC' }}>
+              <div className="review-card-stars" style={{ justifyContent: 'flex-start', marginBottom: '16px' }}>
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <Star
+                    key={s}
+                    size={16}
+                    fill={s <= review.rating ? '#F59E0B' : 'none'}
+                    stroke={s <= review.rating ? '#F59E0B' : '#E5E7EB'}
+                    strokeWidth={1.5}
+                  />
                 ))}
               </div>
-              <p style={{ color: '#374151', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px', fontStyle: 'italic' }}>"{review.review}"</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #8B4513, #D4A574)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '700', fontSize: '14px' }}>
+              {review.title && (
+                <h3 className="review-card-title" style={{ marginBottom: '10px' }}>{review.title}</h3>
+              )}
+              <p className="review-card-quote">&ldquo;{review.review}&rdquo;</p>
+              <div className="review-card-footer">
+                <div className="review-card-avatar" style={{ width: '36px', height: '36px', fontSize: '14px' }}>
                   {review.customerName?.[0]?.toUpperCase() || 'A'}
                 </div>
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontWeight: '600', color: '#1F2937', fontSize: '14px' }}>{review.customerName}</div>
-                  {review.productName && <div style={{ fontSize: '12px', color: '#9CA3AF' }}>{review.productName}</div>}
+                  {review.productName && (
+                    <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>{review.productName}</div>
+                  )}
                 </div>
               </div>
             </div>
