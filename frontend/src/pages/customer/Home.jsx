@@ -240,12 +240,12 @@ const Home = () => {
           </div>
           <div className="grid-4-col">
             {categories.map((cat, i) => (
-              <Link key={i} to={`/shop?category=${cat.id}`} style={{ textDecoration: 'none' }}>
-                <div style={{ backgroundColor: 'white', borderRadius: '16px', padding: '24px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6', transition: 'all 0.2s', cursor: 'pointer' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#FFF3E0', color: '#8B4513', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+              <Link key={i} to={`/shop?category=${cat.id}`} className="category-card-link">
+                <div className="category-card">
+                  <div className="category-card-icon">
                     <cat.icon size={24} />
                   </div>
-                  <div style={{ fontWeight: '600', color: '#1F2937', fontSize: '14px' }}>{cat.name}</div>
+                  <div className="category-card-label">{cat.name}</div>
                 </div>
               </Link>
             ))}
