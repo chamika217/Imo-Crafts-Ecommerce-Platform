@@ -93,10 +93,10 @@ const CustomOrder = () => {
 
       {/* Form + Info */}
       <section style={{ padding: '64px 0', backgroundColor: '#F9FAFB' }}>
-        <div className="page-container" style={{ maxWidth: '760px' }}>
+        <div className="page-container--narrow">
 
           {/* Info Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '40px' }}>
+          <div className="grid-3-col" style={{ marginBottom: '40px' }}>
             {[
               { icon: Zap, title: 'Quick Response', desc: 'We reply within 24 hours' },
               { icon: DollarSign, title: 'Fair Pricing', desc: 'Competitive craft prices' },
@@ -116,7 +116,7 @@ const CustomOrder = () => {
           <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '40px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #F3F4F6' }}>
             <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#1F2937', marginBottom: '28px' }}>Tell Us About Your Order</h2>
             <form onSubmit={handleSubmit}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+              <div className="grid-form-2" style={{ marginBottom: '20px' }}>
                 <div>
                   <label style={{ fontSize: '14px', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '8px' }}>Full Name *</label>
                   <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Your full name" style={inputStyle} />

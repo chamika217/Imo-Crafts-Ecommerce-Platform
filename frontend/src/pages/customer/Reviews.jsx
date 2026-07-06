@@ -128,7 +128,7 @@ const Reviews = () => {
 
       {/* Hero */}
       <section className="animate-fade-in-up" style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%)', padding: '64px 0' }}>
-        <div className="page-container" style={{ maxWidth: '800px', textAlign: 'center' }}>
+        <div className="page-container--text" style={{ textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '8px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: '500', marginBottom: '20px' }}>
             ⭐ Customer Reviews
           </div>

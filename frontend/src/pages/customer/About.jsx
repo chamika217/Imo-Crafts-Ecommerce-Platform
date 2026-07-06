@@ -80,7 +80,7 @@ const About = () => {
             <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#1F2937', marginBottom: '12px' }}>Why Choose Us</h2>
             <p style={{ color: '#9CA3AF' }}>What makes Imo Crafts special</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+          <div className="grid-4-col">
             {[
               { icon: Heart, title: 'Made with Love', desc: 'Every piece is handcrafted with care and passion.' },
               { icon: Star, title: 'Premium Quality', desc: 'High quality materials for lasting beauty.' },
@@ -101,7 +101,7 @@ const About = () => {
 
       {/* CTA */}
       <section style={{ padding: '80px 0', backgroundColor: 'white' }}>
-        <div className="page-container" style={{ maxWidth: '600px', textAlign: 'center' }}>
+        <div className="page-container--text" style={{ textAlign: 'center' }}>
           <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#1F2937', marginBottom: '16px' }}>Ready to Order?</h2>
           <p style={{ color: '#6B7280', marginBottom: '32px', lineHeight: '1.7' }}>
             Browse our collection or place a custom order for your special occasion.
