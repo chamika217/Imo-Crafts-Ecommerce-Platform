@@ -38,8 +38,8 @@ const Footer = () => {
     <footer className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #6B4E3D 0%, #5C4033 50%, #4A3228 100%)', color: '#F5EDE4' }}>
 
       {/* Decorative blobs */}
-      <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(196,168,130,0.08) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
-      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(196,168,130,0.06) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
+      <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none animate-float" style={{ background: 'radial-gradient(circle, rgba(196,168,130,0.08) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full pointer-events-none animate-float" style={{ background: 'radial-gradient(circle, rgba(196,168,130,0.06) 0%, transparent 70%)', transform: 'translate(-30%, 30%)', animationDelay: '1.5s' }} />
 
       {/* Top stripe */}
       <div className="h-1 flex">
@@ -72,7 +72,7 @@ const Footer = () => {
           {/* Col 1 - Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #C4956A, #8B6F5E)' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 animate-float" style={{ background: 'linear-gradient(135deg, #C4956A, #8B6F5E)' }}>
                 <Heart size={18} className="text-white" fill="white" />
               </div>
               <div>
@@ -93,7 +93,7 @@ const Footer = () => {
                 { icon: WhatsAppIcon, label: 'WhatsApp', onClick: () => {} },
               ].map(({ icon: Icon, label, onClick }) => (
                 <button key={label} onClick={onClick} aria-label={label}
-                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:brightness-125"
                   style={{ border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)' }}>
                   <Icon size={15} />
                 </button>
