@@ -93,6 +93,7 @@ const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentImage, setCurrentImage] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -113,6 +114,65 @@ const Home = () => {
       setCurrentImage((prev) => (prev + 1) % heroImages.length);
     }, 3000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Cursor-following tilt effect for category cards
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleTilt = (e) => {
+      const card = e.currentTarget;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    };
+
+    const resetTilt = (e) => {
+      const card = e.currentTarget;
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    };
+
+    // Add tilt effect to category cards
+    const categoryCards = document.querySelectorAll('.category-card');
+    categoryCards.forEach(card => {
+      card.addEventListener('mousemove', handleTilt);
+      card.addEventListener('mouseleave', resetTilt);
+    });
+
+    // Add mouse tracking for promo banners
+    const promoBanners = document.querySelectorAll('.promo-banner');
+    promoBanners.forEach(banner => {
+      banner.addEventListener('mousemove', (e) => {
+        const rect = banner.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        banner.style.setProperty('--mouse-x', `${x}%`);
+        banner.style.setProperty('--mouse-y', `${y}%`);
+      });
+    });
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      categoryCards.forEach(card => {
+        card.removeEventListener('mousemove', handleTilt);
+        card.removeEventListener('mouseleave', resetTilt);
+      });
+      promoBanners.forEach(banner => {
+        banner.removeEventListener('mousemove', () => {});
+      });
+    };
   }, []);
 
   const categories = [
@@ -180,9 +240,9 @@ const Home = () => {
             </div>
 
             {/* Right - Image Carousel */}
-            <div className="animate-scale-in animate-float" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '100%', height: '100%', background: 'linear-gradient(135deg, #D4A574, #8B4513)', borderRadius: '32px', opacity: 0.15, zIndex: 0 }} />
-              <div style={{ position: 'relative', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(139,69,19,0.2)', aspectRatio: '4/5', backgroundColor: 'white' }}>
+            <div className="animate-scale-in animate-float-slow" style={{ position: 'relative' }}>
+              <div className="animate-float-medium" style={{ position: 'absolute', top: '-20px', right: '-20px', width: '100%', height: '100%', background: 'linear-gradient(135deg, #D4A574, #8B4513)', borderRadius: '32px', opacity: 0.15, zIndex: 0 }} />
+              <div className="hero-image-wrapper" style={{ position: 'relative', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(139,69,19,0.2)', aspectRatio: '4/5', backgroundColor: 'white' }}>
                 {heroImages.map((img, i) => (
                   <img
                     key={i}
@@ -232,7 +292,7 @@ const Home = () => {
               { icon: <Shield size={22} />, title: 'Cash on Delivery', desc: 'Pay safely when you receive' },
               { icon: <Phone size={22} />, title: 'Custom Orders', desc: 'Personalized just for you' },
             ].map((f, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', borderRadius: '16px' }}>
+              <div key={i} className="feature-card" style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', borderRadius: '16px' }}>
                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#FFF3E0', color: '#8B4513', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {f.icon}
                 </div>
@@ -339,9 +399,9 @@ const Home = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
 
             {/* Banner 1 - Custom Orders */}
-            <div style={{ background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 100%)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', minHeight: '180px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '160px', height: '160px', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '50%' }} />
-              <div style={{ position: 'absolute', bottom: '-40px', right: '40px', width: '120px', height: '120px', backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: '50%' }} />
+            <div className="promo-banner" style={{ background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 100%)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', minHeight: '180px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div className="animate-float-slow" style={{ position: 'absolute', top: '-30px', right: '-30px', width: '160px', height: '160px', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '50%' }} />
+              <div className="animate-float-medium" style={{ position: 'absolute', bottom: '-40px', right: '40px', width: '120px', height: '120px', backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: '50%' }} />
               <div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(255,255,255,0.15)', color: 'white', padding: '4px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: '500', marginBottom: '12px' }}>
                   <Sparkles size={12} /> Special Order
@@ -359,8 +419,8 @@ const Home = () => {
             </div>
 
             {/* Banner 2 - Free delivery */}
-            <div style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFE0B2 100%)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', minHeight: '180px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #FFD5A0' }}>
-              <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '140px', height: '140px', backgroundColor: 'rgba(139,69,19,0.05)', borderRadius: '50%' }} />
+            <div className="promo-banner" style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFE0B2 100%)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', minHeight: '180px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #FFD5A0' }}>
+              <div className="animate-float-slow" style={{ position: 'absolute', top: '-20px', right: '-20px', width: '140px', height: '140px', backgroundColor: 'rgba(139,69,19,0.05)', borderRadius: '50%' }} />
               <div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '4px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: '500', marginBottom: '12px' }}>
                   <Truck size={12} /> Delivery

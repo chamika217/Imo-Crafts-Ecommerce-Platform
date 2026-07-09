@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Sparkles, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { auth } from '../../firebase/config';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import toast from 'react-hot-toast';
+import logo from '../../assets/logo.png';
 
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -53,11 +54,7 @@ const Login = () => {
       await sendPasswordResetEmail(auth, email.trim());
       toast.success('Password reset email sent! Check your inbox.');
     } catch (error) {
-      if (error.code === 'auth/user-not-found') {
-        toast.error('No account found with this email');
-      } else {
-        toast.error('Failed to send reset email. Try again.');
-      }
+      toast.error(error.code === 'auth/user-not-found' ? 'No account found with this email' : 'Failed to send reset email. Try again.');
     } finally {
       setResetLoading(false);
     }
@@ -65,7 +62,8 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* Brand Panel */}
+
+      {/* Left brand panel */}
       <div
         className="hidden lg:flex lg:w-[44%] relative overflow-hidden"
         style={{ background: 'linear-gradient(160deg, #4A3228 0%, #7A4E2D 40%, #9A5B2E 100%)' }}
@@ -73,9 +71,16 @@ const Login = () => {
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-10 -right-10 w-72 h-72 bg-amber-400/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-orange-500/15 rounded-full blur-3xl" />
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '28px 28px' }} />
         </div>
         <div className="relative flex flex-col justify-between w-full p-10 xl:p-14">
-          <div></div>
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="Imo Crafts" className="w-12 h-12 rounded-2xl object-cover border border-white/15 shadow-lg" />
+            <div>
+              <h1 className="text-xl font-bold text-white tracking-tight">Imo Crafts</h1>
+              <p className="text-amber-200/60 text-xs font-medium uppercase tracking-widest mt-0.5">Handmade Gifts</p>
+            </div>
+          </div>
           <div className="py-10">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/10 text-amber-100 text-xs font-medium px-3 py-1.5 rounded-full mb-6">
               <Sparkles size={13} /> Handcrafted with Love in Sri Lanka
@@ -91,15 +96,13 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Form Panel */}
+      {/* Right form panel */}
       <div className="flex-1 relative flex items-center justify-center px-5 py-10 sm:px-8 bg-[#F7F2EC]">
         <div className="relative w-full max-w-[440px]">
 
           {/* Mobile header */}
           <div className="lg:hidden flex items-center gap-3 mb-8">
-            <span className="w-11 h-11 rounded-2xl flex items-center justify-center text-white" style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}>
-              <Sparkles size={18} />
-            </span>
+            <img src={logo} alt="Imo Crafts" className="w-11 h-11 rounded-2xl object-cover shadow-md" />
             <div>
               <h1 className="text-lg font-bold text-[#5C4033]">Imo Crafts</h1>
               <p className="text-[#A89584] text-xs font-medium">Handmade Gifts</p>
@@ -130,49 +133,44 @@ const Login = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Name (register only) */}
                 {isRegister && (
                   <div>
-                    <label htmlFor="name" className="text-sm font-semibold text-[#5C4033] mb-2 block">Full name</label>
-                    <div className="login-field flex items-center w-full rounded-xl border border-[#E0D5C8] bg-[#FAF6F1] focus-within:border-[#C4A882] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#C4A882]/20 transition-all overflow-hidden">
-                      <span className="flex items-center justify-center w-11 shrink-0 text-[#B5A08C]"><User size={17} strokeWidth={2} /></span>
-                      <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Your name"
-                        className="login-input min-w-0 flex-1 py-3 pr-4 bg-transparent border-0 outline-none text-[#2D2018] text-sm placeholder:text-[#C4B5A5]" />
+                    <label className="text-sm font-semibold text-[#5C4033] mb-2 block">Full name</label>
+                    <div className="flex items-center w-full rounded-xl border border-[#E0D5C8] bg-[#FAF6F1] focus-within:border-[#C4A882] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#C4A882]/20 transition-all overflow-hidden">
+                      <span className="flex items-center justify-center w-11 shrink-0 text-[#B5A08C]"><User size={17} /></span>
+                      <input type="text" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Your name"
+                        className="min-w-0 flex-1 py-3 pr-4 bg-transparent border-0 outline-none text-[#2D2018] text-sm placeholder:text-[#C4B5A5]" />
                     </div>
                   </div>
                 )}
 
-                {/* Email */}
                 <div>
-                  <label htmlFor="email" className="text-sm font-semibold text-[#5C4033] mb-2 block">Email address</label>
-                  <div className="login-field flex items-center w-full rounded-xl border border-[#E0D5C8] bg-[#FAF6F1] focus-within:border-[#C4A882] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#C4A882]/20 transition-all overflow-hidden">
-                    <span className="flex items-center justify-center w-11 shrink-0 text-[#B5A08C]"><Mail size={17} strokeWidth={2} /></span>
-                    <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder="you@email.com"
-                      className="login-input min-w-0 flex-1 py-3 pr-4 bg-transparent border-0 outline-none text-[#2D2018] text-sm placeholder:text-[#C4B5A5]" />
+                  <label className="text-sm font-semibold text-[#5C4033] mb-2 block">Email address</label>
+                  <div className="flex items-center w-full rounded-xl border border-[#E0D5C8] bg-[#FAF6F1] focus-within:border-[#C4A882] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#C4A882]/20 transition-all overflow-hidden">
+                    <span className="flex items-center justify-center w-11 shrink-0 text-[#B5A08C]"><Mail size={17} /></span>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder="you@email.com"
+                      className="min-w-0 flex-1 py-3 pr-4 bg-transparent border-0 outline-none text-[#2D2018] text-sm placeholder:text-[#C4B5A5]" />
                   </div>
                 </div>
 
-                {/* Password */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label htmlFor="password" className="text-sm font-semibold text-[#5C4033]">Password</label>
+                    <label className="text-sm font-semibold text-[#5C4033]">Password</label>
                     {!isRegister && (
                       <button type="button" onClick={handleForgotPassword} disabled={resetLoading}
-                        className="text-xs text-[#8B4513] hover:text-[#6B3410] font-medium transition-colors disabled:opacity-60">
+                        className="text-xs text-[#8B4513] hover:text-[#6B3410] font-medium disabled:opacity-60">
                         {resetLoading ? 'Sending...' : 'Forgot password?'}
                       </button>
                     )}
                   </div>
-                  <div className="login-field flex items-center w-full rounded-xl border border-[#E0D5C8] bg-[#FAF6F1] focus-within:border-[#C4A882] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#C4A882]/20 transition-all overflow-hidden">
-                    <span className="flex items-center justify-center w-11 shrink-0 text-[#B5A08C]"><Lock size={17} strokeWidth={2} /></span>
-                    <input id="password" type={showPassword ? 'text' : 'password'} value={password}
-                      onChange={(e) => setPassword(e.target.value)} required
-                      autoComplete={isRegister ? 'new-password' : 'current-password'}
-                      placeholder={isRegister ? 'Min. 6 characters' : 'Enter your password'}
-                      minLength={6}
-                      className="login-input min-w-0 flex-1 py-3 bg-transparent border-0 outline-none text-[#2D2018] text-sm placeholder:text-[#C4B5A5]" />
+                  <div className="flex items-center w-full rounded-xl border border-[#E0D5C8] bg-[#FAF6F1] focus-within:border-[#C4A882] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#C4A882]/20 transition-all overflow-hidden">
+                    <span className="flex items-center justify-center w-11 shrink-0 text-[#B5A08C]"><Lock size={17} /></span>
+                    <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)}
+                      required autoComplete={isRegister ? 'new-password' : 'current-password'}
+                      placeholder={isRegister ? 'Min. 6 characters' : 'Enter your password'} minLength={6}
+                      className="min-w-0 flex-1 py-3 bg-transparent border-0 outline-none text-[#2D2018] text-sm placeholder:text-[#C4B5A5]" />
                     <button type="button" onClick={() => setShowPassword(!showPassword)}
-                      className="flex items-center justify-center w-11 shrink-0 text-[#B5A08C] hover:text-[#8B4513] transition-colors">
+                      className="flex items-center justify-center w-11 shrink-0 text-[#B5A08C] hover:text-[#8B4513]">
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
@@ -183,12 +181,9 @@ const Login = () => {
                     className="w-full flex items-center justify-center gap-2 text-white py-3.5 rounded-xl font-semibold text-sm transition-all disabled:opacity-60"
                     style={{ background: 'linear-gradient(135deg, #7A4E2D 0%, #9A5B2E 100%)' }}>
                     {loading ? (
-                      <span className="flex items-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        Please wait...
-                      </span>
+                      <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Please wait...</span>
                     ) : (
-                      <>{isRegister ? 'Create Account' : 'Sign In'}<ArrowRight size={17} strokeWidth={2.5} /></>
+                      <>{isRegister ? 'Create Account' : 'Sign In'}<ArrowRight size={17} /></>
                     )}
                   </button>
 

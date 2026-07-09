@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Search, LogOut, User } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, LogOut, User, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -18,10 +18,22 @@ const navLinks = [
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [shopRipple, setShopRipple] = useState(null);
   const { cartCount } = useCart();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleShopClick = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ripple = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      id: Date.now()
+    };
+    setShopRipple(ripple);
+    setTimeout(() => setShopRipple(null), 600);
+  };
   const handleLogout = async () => {
     await logout();
     toast.success('Logged out successfully');
@@ -70,10 +82,38 @@ const Navbar = () => {
 
           <div className="flex items-center gap-7">
             {navLinks.map(({ to, label }) => (
-              <Link key={to} to={to} className={linkClass(to)}>
-                {label}
+              <Link 
+                key={to} 
+                to={to} 
+                className="nav-link"
+                onClick={to === '/shop' ? handleShopClick : undefined}
+              >
+                {to === '/shop' ? (
+                  <span className="nav-shop-link">
+                    <ShoppingBag size={18} className="shop-icon" />
+                    {label}
+                    <span className="nav-shop-tooltip">Browse our collection</span>
+                    {shopRipple && (
+                      <span 
+                        className="nav-shop-ripple"
+                        style={{
+                          left: shopRipple.x,
+                          top: shopRipple.y,
+                          width: '20px',
+                          height: '20px',
+                          marginLeft: '-10px',
+                          marginTop: '-10px'
+                        }}
+                      />
+                    )}
+                  </span>
+                ) : (
+                  <span className="nav-link-text">
+                    {label}
+                  </span>
+                )}
                 {isActive(to) && (
-                  <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full bg-[#8B4513]" />
+                  <span className="nav-link-underline" />
                 )}
               </Link>
             ))}
@@ -173,12 +213,13 @@ const Navbar = () => {
                   key={to}
                   to={to}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                     isActive(to)
                       ? 'bg-[#FAF6F1] text-[#8B4513]'
                       : 'text-gray-600 hover:bg-gray-50'
                   }`}
                 >
+                  {to === '/shop' && <ShoppingBag size={16} className="shop-icon" />}
                   {label}
                 </Link>
               ))}

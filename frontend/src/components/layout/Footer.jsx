@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Banknote, Truck, Sparkles, Clock, ArrowRight, Heart } from 'lucide-react';
+import { Banknote, Truck, Sparkles, Clock, ArrowRight, Heart, Mail, Phone, MapPin, Gift, Home as HomeIcon, PartyPopper } from 'lucide-react';
 import { FacebookIcon, InstagramIcon, WhatsAppIcon } from '../ui/SocialIcons';
 
 const Footer = () => {
@@ -16,15 +16,19 @@ const Footer = () => {
     { to: '/shop', label: 'Shop' },
     { to: '/custom-order', label: 'Custom Orders' },
     { to: '/reviews', label: 'Reviews' },
-    { to: '/about', label: 'About Us' },
-    { to: '/contact', label: 'Contact' },
   ];
 
-  const infoItems = [
-    { icon: Banknote, text: 'Cash on Delivery' },
-    { icon: Truck, text: 'Island-wide Delivery' },
-    { icon: Sparkles, text: 'Custom Orders Available' },
-    { icon: Clock, text: 'Mon - Sat: 9AM - 6PM' },
+  const categories = [
+    { to: '/shop?category=handmade-gifts', label: 'Handmade Gifts', icon: Gift },
+    { to: '/shop?category=event-crafts', label: 'Event & Party', icon: PartyPopper },
+    { to: '/shop?category=home-decor', label: 'Home Decor', icon: HomeIcon },
+    { to: '/shop?category=custom-orders', label: 'Custom Orders', icon: Sparkles },
+  ];
+
+  const contactInfo = [
+    { icon: Mail, text: 'info@imocrafts.lk', label: 'Email' },
+    { icon: Phone, text: '+94 7X XXX XXXX', label: 'Phone' },
+    { icon: MapPin, text: 'Sri Lanka', label: 'Location' },
   ];
 
   return (
@@ -62,12 +66,12 @@ const Footer = () => {
 
       {/* Main footer content */}
       <div className="page-container py-14">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 
-          {/* Brand */}
-          <div className="md:col-span-5">
+          {/* About Us */}
+          <div className="footer-section">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #C4956A, #8B6F5E)' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center footer-logo-icon" style={{ background: 'linear-gradient(135deg, #C4956A, #8B6F5E)' }}>
                 <Heart size={18} className="text-white" fill="white" />
               </div>
               <h3 className="text-xl font-bold" style={{ color: '#E8D5C0' }}>Imo Crafts</h3>
@@ -83,10 +87,8 @@ const Footer = () => {
                   key={label}
                   onClick={onClick}
                   aria-label={label}
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                  className="footer-social-icon w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
                   style={{ border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(196,149,106,0.25)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
                 >
                   <Icon size={16} />
                 </button>
@@ -96,7 +98,7 @@ const Footer = () => {
             {/* Trust badges */}
             <div className="flex gap-2 flex-wrap">
               {['Handmade', 'COD', 'Island-wide'].map(badge => (
-                <span key={badge} className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(255,255,255,0.07)', color: '#C4B0A0', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <span key={badge} className="footer-badge px-3 py-1 rounded-full text-xs font-medium transition-all hover:scale-105 cursor-default" style={{ background: 'rgba(255,255,255,0.07)', color: '#C4B0A0', border: '1px solid rgba(255,255,255,0.08)' }}>
                   {badge}
                 </span>
               ))}
@@ -104,34 +106,52 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="md:col-span-3">
-            <h4 className="font-bold mb-5 text-xs uppercase tracking-widest" style={{ color: '#D4A574' }}>Quick Links</h4>
+          <div className="footer-section">
+            <h4 className="footer-heading font-bold mb-5 text-xs uppercase tracking-widest" style={{ color: '#D4A574' }}>Quick Links</h4>
             <div className="flex flex-col gap-3">
               {quickLinks.map(({ to, label }) => (
                 <Link
                   key={to} to={to}
-                  className="text-sm flex items-center gap-2 group transition-all"
+                  className="footer-link text-sm flex items-center gap-2 group transition-all"
                   style={{ color: '#C4B0A0' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#F5EDE4'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#C4B0A0'}
                 >
-                  <span className="w-1 h-1 rounded-full bg-current opacity-50 group-hover:opacity-100 transition-opacity" />
+                  <ArrowRight size={12} className="footer-link-arrow opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   {label}
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Info */}
-          <div className="md:col-span-4">
-            <h4 className="font-bold mb-5 text-xs uppercase tracking-widest" style={{ color: '#D4A574' }}>Information</h4>
+          {/* Categories */}
+          <div className="footer-section">
+            <h4 className="footer-heading font-bold mb-5 text-xs uppercase tracking-widest" style={{ color: '#D4A574' }}>Categories</h4>
             <div className="flex flex-col gap-3">
-              {infoItems.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(196,149,106,0.15)', border: '1px solid rgba(196,149,106,0.2)' }}>
+              {categories.map(({ to, label, icon: Icon }) => (
+                <Link
+                  key={to} to={to}
+                  className="footer-link text-sm flex items-center gap-2 group transition-all"
+                  style={{ color: '#C4B0A0' }}
+                >
+                  <Icon size={14} className="footer-category-icon opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact Information */}
+          <div className="footer-section">
+            <h4 className="footer-heading font-bold mb-5 text-xs uppercase tracking-widest" style={{ color: '#D4A574' }}>Contact Us</h4>
+            <div className="flex flex-col gap-4">
+              {contactInfo.map(({ icon: Icon, text, label }) => (
+                <div key={label} className="footer-contact-item flex items-start gap-3 group">
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110" style={{ background: 'rgba(196,149,106,0.15)', border: '1px solid rgba(196,149,106,0.2)' }}>
                     <Icon size={14} style={{ color: '#D4A574' }} />
                   </div>
-                  <p className="text-sm" style={{ color: '#C4B0A0' }}>{text}</p>
+                  <div>
+                    <p className="text-xs font-medium mb-0.5" style={{ color: '#B0978A' }}>{label}</p>
+                    <p className="text-sm" style={{ color: '#C4B0A0' }}>{text}</p>
+                  </div>
                 </div>
               ))}
             </div>

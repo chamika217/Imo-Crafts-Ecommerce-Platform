@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { ShoppingCart, Package } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -8,6 +9,7 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [tiltStyle, setTiltStyle] = useState({ transform: 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)' });
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -20,11 +22,39 @@ const ProductCard = ({ product }) => {
     toast.success(`${product.name} added to cart!`);
   };
 
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (y - centerY) / 20;
+    const rotateY = (centerX - x) / 20;
+    
+    setTiltStyle({
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTiltStyle({
+      transform: 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)'
+    });
+  };
+
   const isOutOfStock = product.status === 'out_of_stock';
 
   return (
     <Link to={`/shop/${product.id}`} className="group flex flex-col h-full">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col h-full">
+      <div 
+        className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full cursor-tilt"
+        style={tiltStyle}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
 
         {/* Fixed-height image area */}
         <div className="relative overflow-hidden bg-gray-50 flex-shrink-0" style={{ paddingBottom: '100%', position: 'relative' }}>
