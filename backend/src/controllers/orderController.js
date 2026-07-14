@@ -20,8 +20,35 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
-// Get single order
-export const getOrderById = async (req, res) => {
+// Get orders by customer email (customer dashboard)
+export const getOrdersByCustomer = async (req, res) => {
+  try {
+    const { email, phone } = req.query;
+    
+    if (!email && !phone) {
+      return res.status(400).json({ message: 'Email or phone required' });
+    }
+
+    let snapshot;
+    if (email) {
+      snapshot = await db.collection('orders')
+        .where('customerInfo.email', '==', email)
+        .get();
+    } else {
+      snapshot = await db.collection('orders')
+        .where('customerInfo.phone', '==', phone)
+        .get();
+    }
+
+    const orders = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
   try {
     const doc = await db.collection('orders').doc(req.params.id).get();
     if (!doc.exists) {
