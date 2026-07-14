@@ -29,6 +29,8 @@ app.use(cors({
       /^https:\/\/imo-crafts-ecommerce-platform.*\.vercel\.app$/,
       'http://localhost:5173',
       'http://localhost:5174',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:5174',
     ];
     
     const isAllowed = allowedOrigins.some(allowed => {
@@ -36,12 +38,8 @@ app.use(cors({
       return allowed === origin;
     });
     
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      console.log('CORS blocked origin:', origin);
-      callback(null, true); // Allow all for now - restrict later
-    }
+    // Allow all origins in development / always allow for now
+    callback(null, true);
   },
   credentials: true,
 }));
