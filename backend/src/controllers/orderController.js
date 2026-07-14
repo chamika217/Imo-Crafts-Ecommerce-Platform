@@ -121,6 +121,35 @@ export const payhereNotify = async (req, res) => {
   }
 };
 
+// Get orders by customer phone or email
+export const getOrdersByCustomer = async (req, res) => {
+  try {
+    const { phone, email } = req.query;
+    if (!phone && !email) {
+      return res.status(400).json({ message: 'Phone number or email is required' });
+    }
+
+    let query = db.collection('orders').orderBy('createdAt', 'desc');
+    
+    if (phone) {
+      query = query.where('customerInfo.phone', '==', phone);
+    } else if (email) {
+      query = query.where('customerInfo.email', '==', email);
+    }
+
+    const snapshot = await query.get();
+
+    const orders = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Delete order
 export const deleteOrder = async (req, res) => {
   try {

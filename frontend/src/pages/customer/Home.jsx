@@ -95,22 +95,33 @@ const TestimonialsSection = () => {
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentImage, setCurrentImage] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const fetchFeatured = async () => {
+    const fetchProducts = async () => {
       try {
-        const res = await axios.get(`${API_URL}/products/featured`);
-        setFeaturedProducts(res.data.slice(0, 8));
+        const res = await axios.get(`${API_URL}/products`);
+        const allProducts = res.data;
+        
+        // Featured products
+        setFeaturedProducts(allProducts.filter(p => p.featured).slice(0, 8));
+        
+        // New arrivals (sorted by createdAt)
+        setNewArrivals([...allProducts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8));
+        
+        // Best sellers (random selection for demo - in real app, this would be based on sales data)
+        setBestSellers([...allProducts].sort(() => Math.random() - 0.5).slice(0, 8));
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
-    fetchFeatured();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -217,8 +228,8 @@ const Home = () => {
   return (
     <div style={{ width: '100%', overflowX: 'hidden' }}>
       <SEO
-        title="Home — Shop Handmade Crafts"
-        description="Shop handmade resin art, personalized gifts, home decor and custom crafts. Browse our featured collection and place your order online."
+        title="Imo Crafts — Handmade Resin Art & Personalized Gifts in Sri Lanka"
+        description="Discover unique handmade resin art, personalized gifts, home decor and custom crafts. Beautiful handcrafted items for every occasion. Island-wide delivery available."
         url="/home"
       />
 
@@ -235,15 +246,14 @@ const Home = () => {
             {/* Left - Text */}
             <div className="animate-fade-in-up">
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(139, 69, 19, 0.1)', color: '#8B4513', padding: '8px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: '600', marginBottom: '24px', backdropFilter: 'blur(10px)', border: '1px solid rgba(139, 69, 19, 0.2)' }}>
-                <Sparkles size={14} /> Handcrafted with Love in Sri Lanka
+                <Sparkles size={14} /> Premium Handcrafted Art from Sri Lanka
               </div>
               <h1 className="hero-title animate-fade-in-up-delay1" style={{ marginBottom: '24px' }}>
-                Unique Handmade<br />
-                Crafts & Gifts
+                Transform Your Space<br />
+                With Handcrafted Beauty
               </h1>
               <p className="animate-fade-in-up-delay2" style={{ fontSize: '18px', color: '#6B7280', maxWidth: '520px', marginBottom: '40px', lineHeight: '1.7' }}>
-                Discover beautifully crafted handmade items, personalized gifts, and custom
-                decorations for every special occasion. Made with love, delivered island wide.
+                Explore our exquisite collection of resin art, personalized gifts, and custom decorations. Each piece tells a story of creativity and craftsmanship, perfect for making your moments unforgettable.
               </p>
               <div className="animate-fade-in-up-delay3" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '48px' }}>
                 <Link
@@ -347,8 +357,8 @@ const Home = () => {
       <section style={{ padding: '80px 0', backgroundColor: '#F9FAFB' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#1F2937', marginBottom: '12px' }}>Shop by Category</h2>
-            <p style={{ fontSize: '16px', color: '#9CA3AF', maxWidth: '600px', margin: '0 auto' }}>Find the perfect handmade item for every occasion</p>
+            <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#1F2937', marginBottom: '12px' }}>Explore Our Collections</h2>
+            <p style={{ fontSize: '16px', color: '#9CA3AF', maxWidth: '600px', margin: '0 auto' }}>Discover handcrafted treasures curated for every celebration and memory</p>
           </div>
           <div className="grid-4-col" style={{ gap: '24px' }}>
             {categories.map((cat, i) => (
@@ -380,8 +390,8 @@ const Home = () => {
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
             <div>
-              <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1F2937', marginBottom: '4px' }}>Featured Products</h2>
-              <p style={{ color: '#9CA3AF' }}>Our most loved handmade creations</p>
+              <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1F2937', marginBottom: '4px' }}>Featured Collection</h2>
+              <p style={{ color: '#9CA3AF' }}>Handpicked favorites that our customers love</p>
             </div>
             <Link to="/shop" style={{ color: '#8B4513', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500', textDecoration: 'none' }}>
               View All <ArrowRight size={16} />
@@ -413,12 +423,76 @@ const Home = () => {
         </div>
       </section>
 
+      {/* New Arrivals */}
+      <section style={{ padding: '64px 0', backgroundColor: 'linear-gradient(135deg, #FFF8F0 0%, #FFE8CC 100%)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '6px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: '600', marginBottom: '12px' }}>
+                <Sparkles size={12} /> Just Arrived
+              </div>
+              <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1F2937', marginBottom: '4px' }}>New Arrivals</h2>
+              <p style={{ color: '#9CA3AF' }}>Fresh from our workshop to your home</p>
+            </div>
+            <Link to="/shop" style={{ color: '#8B4513', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500', textDecoration: 'none' }}>
+              View All <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          {loading ? (
+            <div className="grid-4-col">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} style={{ backgroundColor: '#F3F4F6', borderRadius: '16px', aspectRatio: '1' }} />
+              ))}
+            </div>
+          ) : newArrivals.length > 0 ? (
+            <div className="grid-4-col items-stretch" style={{ gap: '16px' }}>
+              {newArrivals.map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {/* Best Sellers */}
+      <section style={{ padding: '64px 0', backgroundColor: 'white' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#D1FAE5', color: '#065F46', padding: '6px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: '600', marginBottom: '12px' }}>
+                <Star size={12} fill="currentColor" /> Top Rated
+              </div>
+              <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1F2937', marginBottom: '4px' }}>Best Sellers</h2>
+              <p style={{ color: '#9CA3AF' }}>Most popular items loved by our customers</p>
+            </div>
+            <Link to="/shop" style={{ color: '#8B4513', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500', textDecoration: 'none' }}>
+              View All <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          {loading ? (
+            <div className="grid-4-col">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} style={{ backgroundColor: '#F3F4F6', borderRadius: '16px', aspectRatio: '1' }} />
+              ))}
+            </div>
+          ) : bestSellers.length > 0 ? (
+            <div className="grid-4-col items-stretch" style={{ gap: '16px' }}>
+              {bestSellers.map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : null}
+        </div>
+      </section>
+
       {/* Why Choose Us */}
       <section style={{ padding: '80px 0', backgroundColor: '#F9FAFB' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ textAlign: 'center', marginBottom: '56px' }}>
             <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#1F2937', marginBottom: '12px' }}>Why Choose Imo Crafts?</h2>
-            <p style={{ fontSize: '16px', color: '#9CA3AF', maxWidth: '600px', margin: '0 auto' }}>Experience the difference of truly handcrafted quality</p>
+            <p style={{ fontSize: '16px', color: '#9CA3AF', maxWidth: '600px', margin: '0 auto' }}>Where passion meets precision in every handcrafted masterpiece</p>
           </div>
           <div className="grid-3-col" style={{ gap: '32px' }}>
             {[
@@ -440,6 +514,39 @@ const Home = () => {
 
       {/* Testimonials Section */}
       <TestimonialsSection />
+
+      {/* Visual Gallery */}
+      <section style={{ padding: '64px 0', backgroundColor: 'linear-gradient(135deg, #FFF5EB 0%, #FFE4D6 50%, #FFD5C2 100%)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#FEF3C7', color: '#92400E', padding: '6px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: '600', marginBottom: '12px' }}>
+              <Sparkles size={12} /> Our Gallery
+            </div>
+            <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#1F2937', marginBottom: '12px' }}>Crafted with Passion</h2>
+            <p style={{ fontSize: '16px', color: '#9CA3AF', maxWidth: '600px', margin: '0 auto' }}>A glimpse into our workshop and the beautiful creations we bring to life</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+            {heroImages.slice(0, 4).map((img, i) => (
+              <div key={i} style={{ 
+                aspectRatio: '1', 
+                borderRadius: '16px', 
+                overflow: 'hidden',
+                boxShadow: '0 4px 20px rgba(139,69,19,0.15)',
+                transform: i % 2 === 0 ? 'translateY(0)' : 'translateY(20px)',
+                transition: 'transform 0.3s ease'
+              }}>
+                <img 
+                  src={img} 
+                  alt={`Gallery ${i + 1}`} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Promotional Banner */}
       <section style={{ padding: '64px 0', backgroundColor: 'white' }}>

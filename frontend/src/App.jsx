@@ -16,6 +16,7 @@ import CustomOrder from './pages/customer/CustomOrder';
 import About from './pages/customer/About';
 import Contact from './pages/customer/Contact';
 import Reviews from './pages/customer/Reviews';
+import CustomerDashboard from './pages/CustomerDashboard';
 
 // Admin Pages
 import AdminLogin from './pages/admin/Login';
@@ -77,6 +78,7 @@ function App() {
             <Route path="/about" element={<CustomerLayout><About /></CustomerLayout>} />
             <Route path="/contact" element={<CustomerLayout><Contact /></CustomerLayout>} />
             <Route path="/reviews" element={<CustomerLayout><Reviews /></CustomerLayout>} />
+            <Route path="/dashboard" element={<CustomerLayout><CustomerDashboard /></CustomerLayout>} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />

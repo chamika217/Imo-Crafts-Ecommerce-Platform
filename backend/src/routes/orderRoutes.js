@@ -6,6 +6,7 @@ import {
   updateOrderStatus,
   deleteOrder,
   payhereNotify,
+  getOrdersByCustomer,
 } from '../controllers/orderController.js';
 import { verifyAdmin, requireRole } from '../middleware/authMiddleware.js';
 
@@ -14,6 +15,7 @@ const router = express.Router();
 // Public routes
 router.post('/', createOrder);
 router.post('/payhere-notify', payhereNotify); // PayHere server callback
+router.get('/customer', getOrdersByCustomer); // Customer orders by phone
 
 // Admin routes
 router.get('/', verifyAdmin, requireRole('staff'), getAllOrders);

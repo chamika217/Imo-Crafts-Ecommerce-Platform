@@ -48,7 +48,12 @@ const Orders = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success('Order status updated!');
-      fetchOrders();
+      // Optimistic update - update local state immediately
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order.id === orderId ? { ...order, orderStatus: newStatus } : order
+        )
+      );
       setSelectedOrder(null);
     } catch (error) {
       toast.error('Failed to update status');

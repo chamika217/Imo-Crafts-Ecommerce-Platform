@@ -15,6 +15,10 @@ const navLinks = [
   { to: '/contact', label: 'Contact' },
 ];
 
+const authNavLinks = [
+  { to: '/dashboard', label: 'Dashboard', icon: <ShoppingBag size={16} /> },
+];
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -152,6 +156,13 @@ const Navbar = () => {
 
             {user ? (
               <div className="flex items-center gap-2 pl-1 border-l border-[#E8DDD0]">
+                <Link
+                  to="/dashboard"
+                  className="hidden md:flex items-center gap-1.5 text-xs text-gray-600 hover:text-[#8B4513] transition-colors px-2 py-1.5 rounded-lg hover:bg-[#FAF6F1]"
+                >
+                  <ShoppingBag size={14} />
+                  Dashboard
+                </Link>
                 <span className="hidden xl:flex items-center gap-1.5 text-xs text-gray-500 max-w-[120px] truncate">
                   <User size={14} />
                   {user?.displayName || user?.email?.split('@')[0]}
@@ -238,13 +249,23 @@ const Navbar = () => {
                 </div>
               </form>
               {user ? (
-                <button
-                  onClick={handleLogout}
-                  className="mt-2 mx-1 flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
-                >
-                  <LogOut size={16} />
-                  Logout
-                </button>
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-[#FAF6F1] transition-colors"
+                  >
+                    <ShoppingBag size={16} />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="mt-2 mx-1 flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </>
               ) : (
                 <Link
                   to="/login"
