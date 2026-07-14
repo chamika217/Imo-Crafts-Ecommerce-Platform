@@ -49,6 +49,9 @@ export const getOrdersByCustomer = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Get single order
+export const getOrderById = async (req, res) => {
   try {
     const doc = await db.collection('orders').doc(req.params.id).get();
     if (!doc.exists) {
