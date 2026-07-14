@@ -27,27 +27,42 @@ const CustomerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [phoneInput, setPhoneInput] = useState('');
+  const [searched, setSearched] = useState(false);
+
+  const fetchOrdersByPhone = async (phone) => {
+    if (!phone.trim()) return;
+    setLoading(true);
+    try {
+      const res = await axios.get(`${API_URL}/orders/customer?phone=${encodeURIComponent(phone.trim())}`);
+      setOrders(res.data);
+      setSearched(true);
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to load orders');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
       if (!user) { setLoading(false); return; }
       try {
-        const params = new URLSearchParams();
-        if (user.email) params.append('email', user.email);
-        // Also try phone from user profile if available
-        const res = await axios.get(`${API_URL}/orders/customer?${params.toString()}`);
-        setOrders(res.data);
-        console.log('Orders loaded:', res.data.length, 'email:', user.email);
-      } catch (err) {
-        console.error('Orders fetch error:', err.response?.data || err.message);
-        // Fallback - load all orders and filter
-        try {
-          const allRes = await axios.get(`${API_URL}/orders/customer?email=${encodeURIComponent(user.email || '')}`);
-          setOrders(allRes.data || []);
-        } catch {
-          setOrders([]);
+        // Try email first
+        if (user.email) {
+          const res = await axios.get(`${API_URL}/orders/customer?email=${encodeURIComponent(user.email)}`);
+          if (res.data.length > 0) {
+            setOrders(res.data);
+            setSearched(true);
+            setLoading(false);
+            return;
+          }
         }
-      } finally {
+        // No orders found by email - show phone search
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
         setLoading(false);
       }
     };
@@ -125,16 +140,57 @@ const CustomerDashboard = () => {
             ))}
           </div>
         ) : orders.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center">
             <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4">
               <Package size={32} className="text-amber-400" />
             </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">No Orders Yet</h3>
-            <p className="text-gray-500 text-sm mb-5">Start shopping to see your order history here</p>
-            <Link to="/shop"
-              className="inline-flex items-center gap-2 bg-amber-700 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-amber-800 transition-colors">
-              Start Shopping <ArrowRight size={16} />
-            </Link>
+
+            {!searched ? (
+              <>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">Find Your Orders</h3>
+                <p className="text-gray-500 text-sm mb-5">Enter your phone number used at checkout to view your orders</p>
+                <div className="flex gap-2 max-w-sm mx-auto">
+                  <input
+                    type="tel"
+                    value={phoneInput}
+                    onChange={(e) => setPhoneInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && fetchOrdersByPhone(phoneInput)}
+                    placeholder="07X XXX XXXX"
+                    className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-amber-400"
+                  />
+                  <button
+                    onClick={() => fetchOrdersByPhone(phoneInput)}
+                    className="px-5 py-2.5 bg-amber-700 text-white rounded-xl text-sm font-semibold hover:bg-amber-800 transition-colors"
+                  >
+                    Search
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">No Orders Found</h3>
+                <p className="text-gray-500 text-sm mb-5">No orders found for this account. Try searching by phone number.</p>
+                <div className="flex gap-2 max-w-sm mx-auto">
+                  <input
+                    type="tel"
+                    value={phoneInput}
+                    onChange={(e) => setPhoneInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && fetchOrdersByPhone(phoneInput)}
+                    placeholder="07X XXX XXXX"
+                    className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-amber-400"
+                  />
+                  <button
+                    onClick={() => fetchOrdersByPhone(phoneInput)}
+                    className="px-5 py-2.5 bg-amber-700 text-white rounded-xl text-sm font-semibold hover:bg-amber-800 transition-colors"
+                  >
+                    Search
+                  </button>
+                </div>
+                <Link to="/shop" className="inline-flex items-center gap-2 mt-5 bg-amber-700 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-amber-800 transition-colors">
+                  Start Shopping <ArrowRight size={16} />
+                </Link>
+              </>
+            )}
           </div>
         ) : (
           <div className="flex flex-col gap-4">
