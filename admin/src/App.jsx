@@ -1,24 +1,37 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-// Admin Pages
-import Login from './pages/admin/Login';
-import Dashboard from './pages/admin/Dashboard';
-import Products from './pages/admin/Products';
-import Orders from './pages/admin/Orders';
-import Customers from './pages/admin/Customers';
-import Inventory from './pages/admin/Inventory';
-import Inquiries from './pages/admin/Inquiries';
-import Media from './pages/admin/Media';
-import Promotions from './pages/admin/Promotions';
-import Reports from './pages/admin/Reports';
-import Reviews from './pages/admin/Reviews';
-import Users from './pages/admin/Users';
+// Lazy load all admin pages - reduces initial bundle size
+const Login = lazy(() => import('./pages/admin/Login'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const Products = lazy(() => import('./pages/admin/Products'));
+const Orders = lazy(() => import('./pages/admin/Orders'));
+const Customers = lazy(() => import('./pages/admin/Customers'));
+const Inventory = lazy(() => import('./pages/admin/Inventory'));
+const Inquiries = lazy(() => import('./pages/admin/Inquiries'));
+const Media = lazy(() => import('./pages/admin/Media'));
+const Promotions = lazy(() => import('./pages/admin/Promotions'));
+const Reports = lazy(() => import('./pages/admin/Reports'));
+const Reviews = lazy(() => import('./pages/admin/Reviews'));
+const Users = lazy(() => import('./pages/admin/Users'));
 
-// Layout
 import AdminSidebar from './components/layout/AdminSidebar';
+import { startKeepAlive } from './utils/keepAlive';
+
+// Start keep-alive on app load
+startKeepAlive();
+
+// Page loader
+const PageLoader = () => (
+  <div className="flex-1 flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex flex-col items-center gap-3">
+      <div className="w-8 h-8 border-2 border-amber-700 border-t-transparent rounded-full animate-spin" />
+      <p className="text-sm text-gray-400">Loading...</p>
+    </div>
+  </div>
+);
 
 const AdminLayout = () => (
   <div className="flex min-h-screen">
@@ -73,7 +86,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/admin/login" replace />} />
           <Route path="/login" element={<Navigate to="/admin/login" replace />} />
-          <Route path="/admin/login" element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/admin/login" element={<GuestRoute><Suspense fallback={<PageLoader />}><Login /></Suspense></GuestRoute>} />
 
           <Route
             path="/admin"
@@ -83,17 +96,17 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Dashboard />} />
-            <Route path="products" element={<Products />} />
-            <Route path="orders" element={<Orders />} />
-            <Route path="customers" element={<Customers />} />
-            <Route path="inventory" element={<Inventory />} />
-            <Route path="inquiries" element={<Inquiries />} />
-            <Route path="media" element={<Media />} />
-            <Route path="promotions" element={<Promotions />} />
-            <Route path="reports" element={<Reports />} />
-            <Route path="reviews" element={<Reviews />} />
-            <Route path="users" element={<Users />} />
+            <Route index element={<Suspense fallback={<PageLoader />}><Dashboard /></Suspense>} />
+            <Route path="products" element={<Suspense fallback={<PageLoader />}><Products /></Suspense>} />
+            <Route path="orders" element={<Suspense fallback={<PageLoader />}><Orders /></Suspense>} />
+            <Route path="customers" element={<Suspense fallback={<PageLoader />}><Customers /></Suspense>} />
+            <Route path="inventory" element={<Suspense fallback={<PageLoader />}><Inventory /></Suspense>} />
+            <Route path="inquiries" element={<Suspense fallback={<PageLoader />}><Inquiries /></Suspense>} />
+            <Route path="media" element={<Suspense fallback={<PageLoader />}><Media /></Suspense>} />
+            <Route path="promotions" element={<Suspense fallback={<PageLoader />}><Promotions /></Suspense>} />
+            <Route path="reports" element={<Suspense fallback={<PageLoader />}><Reports /></Suspense>} />
+            <Route path="reviews" element={<Suspense fallback={<PageLoader />}><Reviews /></Suspense>} />
+            <Route path="users" element={<Suspense fallback={<PageLoader />}><Users /></Suspense>} />
           </Route>
 
           <Route path="*" element={<Navigate to="/admin/login" replace />} />

@@ -127,10 +127,10 @@ const AdminNavbar = () => {
     if (open) fetchNotifications();
   }, [open]);
 
-  // Auto-refresh every 60s
+  // Auto-refresh every 5 minutes (was 60s - too frequent)
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 60000);
+    const interval = setInterval(fetchNotifications, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
