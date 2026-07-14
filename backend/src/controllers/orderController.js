@@ -29,19 +29,17 @@ export const getOrdersByCustomer = async (req, res) => {
       return res.status(400).json({ message: 'Email or phone required' });
     }
 
-    let snapshot;
-    if (email) {
-      snapshot = await db.collection('orders')
-        .where('customerInfo.email', '==', email)
-        .get();
-    } else {
-      snapshot = await db.collection('orders')
-        .where('customerInfo.phone', '==', phone)
-        .get();
-    }
-
+    // Get all orders and filter - avoids Firestore nested field index issues
+    const snapshot = await db.collection('orders').get();
+    
     const orders = snapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(order => {
+        const info = order.customerInfo || {};
+        if (email && info.email === email) return true;
+        if (phone && info.phone === phone) return true;
+        return false;
+      })
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     res.status(200).json(orders);
@@ -49,7 +47,6 @@ export const getOrdersByCustomer = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 // Get single order
 export const getOrderById = async (req, res) => {
   try {

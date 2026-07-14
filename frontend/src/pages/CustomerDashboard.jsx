@@ -32,9 +32,12 @@ const CustomerDashboard = () => {
     const fetchOrders = async () => {
       if (!user?.email) { setLoading(false); return; }
       try {
-        const res = await axios.get(`${API_URL}/orders/customer?email=${user.email}`);
+        const params = new URLSearchParams();
+        if (user.email) params.append('email', user.email);
+        const res = await axios.get(`${API_URL}/orders/customer?${params.toString()}`);
         setOrders(res.data);
-      } catch {
+      } catch (err) {
+        console.error('Orders fetch error:', err.response?.data || err.message);
         toast.error('Failed to load orders');
       } finally {
         setLoading(false);
