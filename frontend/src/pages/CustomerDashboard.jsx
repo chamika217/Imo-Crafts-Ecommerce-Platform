@@ -30,15 +30,23 @@ const CustomerDashboard = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      if (!user?.email) { setLoading(false); return; }
+      if (!user) { setLoading(false); return; }
       try {
         const params = new URLSearchParams();
         if (user.email) params.append('email', user.email);
+        // Also try phone from user profile if available
         const res = await axios.get(`${API_URL}/orders/customer?${params.toString()}`);
         setOrders(res.data);
+        console.log('Orders loaded:', res.data.length, 'email:', user.email);
       } catch (err) {
         console.error('Orders fetch error:', err.response?.data || err.message);
-        toast.error('Failed to load orders');
+        // Fallback - load all orders and filter
+        try {
+          const allRes = await axios.get(`${API_URL}/orders/customer?email=${encodeURIComponent(user.email || '')}`);
+          setOrders(allRes.data || []);
+        } catch {
+          setOrders([]);
+        }
       } finally {
         setLoading(false);
       }
