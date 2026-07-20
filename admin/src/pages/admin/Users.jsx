@@ -12,8 +12,15 @@ const API_URL = import.meta.env.VITE_API_URL;
 const ROLE_LIST = Object.entries(ROLES).map(([value, cfg]) => ({
   value,
   label: cfg.label,
-  color: cfg.color,
+  colorClass: cfg.color,
+  badgeClass: value === 'superAdmin' ? 'bg-amber-100 text-amber-800'
+    : value === 'orderManager' ? 'bg-blue-100 text-blue-800'
+    : value === 'inventoryManager' ? 'bg-green-100 text-green-800'
+    : value === 'contentManager' ? 'bg-purple-100 text-purple-800'
+    : value === 'customerSupport' ? 'bg-pink-100 text-pink-800'
+    : 'bg-indigo-100 text-indigo-800',
   desc: cfg.desc,
+  pages: cfg.pages,
 }));
 
 const Users = () => {
@@ -118,8 +125,7 @@ const Users = () => {
           {ROLE_LIST.map(role => (
             <div key={role.value} className="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm">
               <div className="flex items-center gap-2 mb-1">
-                <span className={`w-2.5 h-2.5 rounded-full ${role.color}`} />
-                <span className="text-xs font-semibold text-gray-700">{role.label}</span>
+                <span className={`px-1.5 py-0.5 rounded text-xs font-semibold ${role.badgeClass}`}>{role.label}</span>
               </div>
               <p className="text-xs text-gray-400 leading-tight">{role.desc}</p>
             </div>
