@@ -43,10 +43,14 @@ export const requireRole = (...allowedRoles) => {
   };
 };
 
-// Role permissions map
+// All defined roles and their backend permissions
 export const ROLE_PERMISSIONS = {
-  superAdmin: ['*'],
-  staff: ['orders:read', 'orders:write', 'customers:read', 'inquiries:read', 'inquiries:write'],
+  superAdmin:       ['*'],
+  orderManager:     ['orders:read', 'orders:write', 'customers:read'],
   inventoryManager: ['products:read', 'products:write', 'inventory:read', 'inventory:write'],
-  contentManager: ['products:read', 'products:write', 'media:read', 'media:write', 'promotions:read', 'promotions:write', 'reviews:read', 'reviews:write'],
+  contentManager:   ['products:read', 'products:write', 'media:read', 'media:write', 'promotions:read', 'promotions:write', 'reviews:read', 'reviews:write'],
+  customerSupport:  ['inquiries:read', 'inquiries:write', 'customers:read', 'reviews:read', 'reviews:write'],
+  staff:            ['orders:read', 'orders:write', 'customers:read', 'inquiries:read', 'inquiries:write'],
 };
+
+export const ALL_ROLES = Object.keys(ROLE_PERMISSIONS);

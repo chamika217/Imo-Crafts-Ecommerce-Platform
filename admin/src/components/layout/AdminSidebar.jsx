@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth, ROLES } from '../../context/AuthContext';
 import {
   LayoutDashboard, Package, ShoppingBag, Users,
   Archive, MessageSquare, Image, Tag, BarChart2, LogOut, Star, UserCog
@@ -51,8 +51,8 @@ const AdminSidebar = () => {
         <h2 className="text-xl font-bold text-amber-400">Imo Crafts</h2>
         <p className="text-gray-400 text-xs mt-1">Admin Panel</p>
         {userRole && (
-          <span className={`inline-block mt-2 px-2 py-0.5 rounded-full text-xs font-medium text-white ${roleColors[userRole] || 'bg-gray-600'}`}>
-            {roleLabels[userRole] || userRole}
+          <span className={`inline-block mt-2 px-2 py-0.5 rounded-full text-xs font-medium text-white ${ROLES[userRole]?.color || 'bg-gray-600'}`}>
+            {ROLES[userRole]?.label || userRole}
           </span>
         )}
       </div>

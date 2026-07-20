@@ -4,15 +4,17 @@ import toast from 'react-hot-toast';
 import AdminNavbar from '../../components/layout/AdminNavbar';
 import { auth } from '../../firebase/config';
 import { Plus, Trash2, Edit2, X, Shield, UserCog } from 'lucide-react';
+import { ROLES } from '../../context/AuthContext';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const ROLES = [
-  { value: 'superAdmin', label: 'Super Admin', color: 'bg-amber-100 text-amber-800', desc: 'Full access to everything' },
-  { value: 'staff', label: 'Staff', color: 'bg-blue-100 text-blue-800', desc: 'Orders, Customers, Inquiries' },
-  { value: 'inventoryManager', label: 'Inventory Manager', color: 'bg-green-100 text-green-800', desc: 'Products & Inventory' },
-  { value: 'contentManager', label: 'Content Manager', color: 'bg-purple-100 text-purple-800', desc: 'Products, Media, Promotions, Reviews' },
-];
+// Build ROLES array for the form
+const ROLE_LIST = Object.entries(ROLES).map(([value, cfg]) => ({
+  value,
+  label: cfg.label,
+  color: cfg.color,
+  desc: cfg.desc,
+}));
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -92,7 +94,7 @@ const Users = () => {
     setShowForm(true);
   };
 
-  const getRoleInfo = (role) => ROLES.find(r => r.value === role) || ROLES[1];
+  const getRoleInfo = (role) => ROLE_LIST.find(r => r.value === role) || ROLE_LIST[0];
 
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-gray-50">
@@ -112,14 +114,14 @@ const Users = () => {
         </div>
 
         {/* Role Legend */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          {ROLES.map(role => (
-            <div key={role.value} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+          {ROLE_LIST.map(role => (
+            <div key={role.value} className="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm">
               <div className="flex items-center gap-2 mb-1">
-                <Shield size={14} className="text-gray-400" />
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${role.color}`}>{role.label}</span>
+                <span className={`w-2.5 h-2.5 rounded-full ${role.color}`} />
+                <span className="text-xs font-semibold text-gray-700">{role.label}</span>
               </div>
-              <p className="text-xs text-gray-400">{role.desc}</p>
+              <p className="text-xs text-gray-400 leading-tight">{role.desc}</p>
             </div>
           ))}
         </div>

@@ -14,13 +14,13 @@ const router = express.Router();
 
 // Public routes
 router.post('/', createOrder);
-router.post('/payhere-notify', payhereNotify); // PayHere server callback
-router.get('/customer', getOrdersByCustomer); // Customer orders by phone
+router.post('/payhere-notify', payhereNotify);
+router.get('/customer', getOrdersByCustomer);
 
-// Admin routes
-router.get('/', verifyAdmin, requireRole('staff'), getAllOrders);
-router.get('/:id', verifyAdmin, requireRole('staff'), getOrderById);
-router.put('/:id', verifyAdmin, requireRole('staff'), updateOrderStatus);
+// staff + orderManager + superAdmin
+router.get('/', verifyAdmin, requireRole('staff', 'orderManager'), getAllOrders);
+router.get('/:id', verifyAdmin, requireRole('staff', 'orderManager'), getOrderById);
+router.put('/:id', verifyAdmin, requireRole('staff', 'orderManager'), updateOrderStatus);
 router.delete('/:id', verifyAdmin, requireRole('superAdmin'), deleteOrder);
 
 export default router;

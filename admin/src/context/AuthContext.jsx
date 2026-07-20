@@ -6,12 +6,50 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-export const ROLE_PERMISSIONS = {
-  superAdmin: ['dashboard', 'products', 'orders', 'customers', 'inventory', 'inquiries', 'media', 'promotions', 'reviews', 'reports', 'users'],
-  staff: ['dashboard', 'orders', 'customers', 'inquiries'],
-  inventoryManager: ['dashboard', 'products', 'inventory'],
-  contentManager: ['dashboard', 'products', 'media', 'promotions', 'reviews'],
+// Role definitions with permissions
+export const ROLES = {
+  superAdmin: {
+    label: 'Super Admin',
+    color: 'bg-amber-500',
+    desc: 'Full access to all modules and permission management',
+    pages: ['dashboard', 'products', 'orders', 'customers', 'inventory', 'inquiries', 'media', 'promotions', 'reviews', 'reports', 'users'],
+  },
+  orderManager: {
+    label: 'Order Manager',
+    color: 'bg-blue-600',
+    desc: 'Access to orders, order status updates, and customer order management',
+    pages: ['dashboard', 'orders', 'customers', 'reports'],
+  },
+  inventoryManager: {
+    label: 'Inventory Manager',
+    color: 'bg-green-600',
+    desc: 'Access to inventory, products, stock management, and related reports',
+    pages: ['dashboard', 'products', 'inventory', 'reports'],
+  },
+  contentManager: {
+    label: 'Content Manager',
+    color: 'bg-purple-600',
+    desc: 'Access to website content, categories, promotions, media, and reviews',
+    pages: ['dashboard', 'products', 'media', 'promotions', 'reviews'],
+  },
+  customerSupport: {
+    label: 'Customer Support',
+    color: 'bg-pink-600',
+    desc: 'Access to inquiries, customer messages, and review management',
+    pages: ['dashboard', 'inquiries', 'customers', 'reviews'],
+  },
+  staff: {
+    label: 'Staff',
+    color: 'bg-indigo-500',
+    desc: 'Access to orders, customers, and inquiries',
+    pages: ['dashboard', 'orders', 'customers', 'inquiries'],
+  },
 };
+
+// Flatten permissions for easy lookup
+export const ROLE_PERMISSIONS = Object.fromEntries(
+  Object.entries(ROLES).map(([key, val]) => [key, val.pages])
+);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -46,7 +84,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setUserRole(null);
     await signOut(auth);
-    // Replace entire history stack so back button cannot return to admin
     window.history.go(-(window.history.length - 1));
     window.location.replace('/admin/login');
   };

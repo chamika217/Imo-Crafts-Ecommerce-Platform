@@ -13,10 +13,10 @@ const router = express.Router();
 // Public routes
 router.post('/', createInquiry);
 
-// staff + superAdmin can manage inquiries
-router.get('/', verifyAdmin, requireRole('staff'), getAllInquiries);
-router.get('/:id', verifyAdmin, requireRole('staff'), getInquiryById);
-router.put('/:id', verifyAdmin, requireRole('staff'), updateInquiryStatus);
+// staff + customerSupport
+router.get('/', verifyAdmin, requireRole('staff', 'customerSupport'), getAllInquiries);
+router.get('/:id', verifyAdmin, requireRole('staff', 'customerSupport'), getInquiryById);
+router.put('/:id', verifyAdmin, requireRole('staff', 'customerSupport'), updateInquiryStatus);
 router.delete('/:id', verifyAdmin, requireRole('superAdmin'), deleteInquiry);
 
 export default router;
