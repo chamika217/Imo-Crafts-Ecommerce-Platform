@@ -170,7 +170,7 @@ const Users = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${roleInfo.color}`}>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${roleInfo.badgeClass || 'bg-gray-100 text-gray-700'}`}>
                           {roleInfo.label}
                         </span>
                       </td>
@@ -246,7 +246,7 @@ const Users = () => {
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-1 block">Role *</label>
                 <div className="space-y-2">
-                  {ROLES.map(role => (
+                  {ROLE_LIST.map(role => (
                     <label key={role.value} className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${formData.role === role.value ? 'border-amber-400 bg-amber-50' : 'border-gray-200 hover:border-gray-300'}`}>
                       <input
                         type="radio" name="role" value={role.value}
@@ -255,7 +255,7 @@ const Users = () => {
                         className="mt-0.5 accent-amber-700"
                       />
                       <div>
-                        <div className={`text-sm font-medium px-2 py-0.5 rounded-full inline-block ${role.color}`}>{role.label}</div>
+                        <div className={`text-sm font-medium px-2 py-0.5 rounded-full inline-block ${role.badgeClass}`}>{role.label}</div>
                         <div className="text-xs text-gray-400 mt-1">{role.desc}</div>
                       </div>
                     </label>
